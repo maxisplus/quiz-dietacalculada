@@ -11,9 +11,9 @@ import WorkoutsStep from '@/components/steps/WorkoutsStep';
 import TrainerStep from '@/components/steps/TrainerStep';
 import GoalStep from '@/components/steps/GoalStep';
 import ObstaclesStep from '@/components/steps/ObstaclesStep';
-import HeardFromStep from '@/components/steps/HeardFromStep';
 import TriedAppsStep from '@/components/steps/TriedAppsStep';
 import LongTermResultsStep from '@/components/steps/LongTermResultsStep';
+import ContactInfoStep from '@/components/steps/ContactInfoStep';
 import HeightWeightStep from '@/components/steps/HeightWeightStep';
 import AchievementsStep from '@/components/steps/AchievementsStep';
 import ThankYouStep from '@/components/steps/ThankYouStep';
@@ -21,9 +21,9 @@ import ThankYouStep from '@/components/steps/ThankYouStep';
 const steps = [
   GenderStep,           // Etapa 0 - Primeira etapa
   WorkoutsStep,         // Etapa 1 - Segunda etapa
-  HeardFromStep,        // Etapa 2 - Terceira etapa
-  TriedAppsStep,        // Etapa 3 - Quarta etapa
-  LongTermResultsStep,  // Etapa 4 - Quinta etapa
+  TriedAppsStep,        // Etapa 2 - Terceira etapa
+  LongTermResultsStep,  // Etapa 3 - Quarta etapa
+  ContactInfoStep,      // Etapa 4 - Quinta etapa (NOVO)
   HeightWeightStep,     // Etapa 5 - Sexta etapa
   BirthDateStep,        // Etapa 6 - Sétima etapa
   TrainerStep,          // Etapa 7 - Oitava etapa

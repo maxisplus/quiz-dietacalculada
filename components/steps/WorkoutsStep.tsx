@@ -40,44 +40,46 @@ export default function WorkoutsStep() {
   };
 
   const renderIcon = (iconType: string, isSelected: boolean) => {
-    const bgClass = isSelected ? 'bg-white' : 'bg-white border border-gray-200';
-    const strokeColor = 'black';
+    const bgClass = isSelected ? 'bg-white shadow-sm' : 'bg-white border-2 border-gray-200';
+    const iconColor = isSelected ? '#1a1a1a' : '#6b7280';
     
     switch (iconType) {
       case 'dot':
-        // Pessoa descansando/caminhando
+        // Ícone de caminhada/leve
         return (
-          <div className={`w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center ${bgClass}`}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="2" strokeLinecap="round">
-              <circle cx="12" cy="5" r="2" fill={strokeColor}/>
-              <path d="M12 9v5M9 21l3-7 3 7"/>
-              <path d="M8 14h8"/>
+          <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center ${bgClass} transition-all`}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="4.5" r="2" fill={iconColor}/>
+              <path d="M12 8c-1 0-2 1-2 2v3l-2 6h1.5l1.5-4 1.5 4H14l-2-6V10c0-1-1-2-2-2z" fill={iconColor}/>
+              <path d="M10 19h4" stroke={iconColor} strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </div>
         );
       case 'triangle':
-        // Pessoa correndo
+        // Ícone de corrida/moderado
         return (
-          <div className={`w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center ${bgClass}`}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="14" cy="4" r="2" fill={strokeColor}/>
-              <path d="M4 17l5-5 2 1 4-4"/>
-              <path d="M15 8l3 3-3 5"/>
-              <path d="M9 12l-3 7h4"/>
+          <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center ${bgClass} transition-all`}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <circle cx="14" cy="3.5" r="2" fill={iconColor}/>
+              <path d="M13 7l-5 5 2 2 3-3 2 3 2-2-3-4-1-1z" fill={iconColor}/>
+              <path d="M7 17l2-4 2 1" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M15 12l1 6 2-1" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
         );
       case 'vertical':
-        // Atleta/haltere
+        // Ícone de musculação/intenso
         return (
-          <div className={`w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center ${bgClass}`}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="2" strokeLinecap="round">
-              <circle cx="12" cy="4" r="2" fill={strokeColor}/>
-              <path d="M12 8v3"/>
-              <path d="M5 11h14"/>
-              <rect x="3" y="9" width="4" height="5" rx="1" fill={strokeColor}/>
-              <rect x="17" y="9" width="4" height="5" rx="1" fill={strokeColor}/>
-              <path d="M9 21l3-7 3 7"/>
+          <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center ${bgClass} transition-all`}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="4" r="2" fill={iconColor}/>
+              <rect x="2" y="9" width="4" height="6" rx="1" fill={iconColor}/>
+              <rect x="18" y="9" width="4" height="6" rx="1" fill={iconColor}/>
+              <rect x="6" y="10.5" width="2" height="3" rx="0.5" fill={iconColor}/>
+              <rect x="16" y="10.5" width="2" height="3" rx="0.5" fill={iconColor}/>
+              <line x1="8" y1="12" x2="16" y2="12" stroke={iconColor} strokeWidth="2.5" strokeLinecap="round"/>
+              <path d="M10 17l2-3 2 3" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M10 20h4" stroke={iconColor} strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </div>
         );

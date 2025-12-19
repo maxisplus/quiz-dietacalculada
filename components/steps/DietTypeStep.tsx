@@ -5,7 +5,6 @@ import { useQuizStore } from '@/store/quizStore';
 
 const diets = [
   { id: 'classico', label: 'Clássico' },
-  { id: 'pescetariano', label: 'Pescetariano' },
   { id: 'vegetariano', label: 'Vegetariano' },
   { id: 'vegano', label: 'Vegano' },
 ];
@@ -24,18 +23,6 @@ const renderIcon = (id: string, isSelected: boolean) => {
             <path d="M10 20v3"/>
             <path d="M8 20l-1 3"/>
             <path d="M12 20l1 3"/>
-          </svg>
-        </div>
-      );
-    case 'pescetariano':
-      // Ícone de peixe
-      return (
-        <div className={`w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center ${bgClass}`}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M6.5 12c2-4 6-6 10-6 2 0 3.5 1 4.5 2-1 1-2.5 2-4.5 2-4 0-8-2-10 2z" fill="black"/>
-            <path d="M6.5 12c2 4 6 6 10 6 2 0 3.5-1 4.5-2-1-1-2.5-2-4.5-2-4 0-8 2-10-2z" fill="black"/>
-            <path d="M2 12l3-2v4l-3-2z" fill="black"/>
-            <circle cx="15" cy="12" r="1" fill="white"/>
           </svg>
         </div>
       );

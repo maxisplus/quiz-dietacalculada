@@ -32,57 +32,61 @@ export default function TriedAppsStep() {
         <div className="space-y-3 max-w-md mx-auto w-full">
           <button
             onClick={() => handleSelect(true)}
-            className={`w-full py-4 md:py-5 px-4 md:px-6 rounded-[16px] md:rounded-[20px] transition-all duration-200 text-left flex items-center gap-4 ${
+            className={`w-full py-5 md:py-6 px-5 md:px-6 rounded-[16px] md:rounded-[20px] transition-all duration-200 flex items-center gap-4 ${
               answers.triedOtherApps === true
                 ? 'bg-[#1a1a1a] text-white'
                 : 'bg-[#f5f5f5] text-black active:bg-gray-200 hover:bg-gray-200'
             }`}
           >
-            {/* Ícone de check */}
-            <div className={`w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center ${
-              answers.triedOtherApps === true ? 'bg-green-500' : 'bg-white border border-gray-200'
+            {/* Ícone de check melhorado */}
+            <div className={`w-13 h-13 md:w-14 md:h-14 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
+              answers.triedOtherApps === true ? 'bg-white shadow-md' : 'bg-white border-2 border-gray-300'
             }`}>
               <svg 
-                width="24" 
-                height="24" 
+                width="28" 
+                height="28" 
                 viewBox="0 0 24 24" 
-                fill="none" 
-                stroke={answers.triedOtherApps === true ? 'white' : '#22c55e'}
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                fill="none"
               >
-                <path d="M5 12l5 5L19 7"/>
+                <path 
+                  d="M20 6L9 17l-5-5" 
+                  stroke={answers.triedOtherApps === true ? '#1a1a1a' : '#9ca3af'}
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </div>
-            <span className="text-[16px] md:text-[17px] font-medium">Sim, já tentei</span>
+            <span className="text-[17px] md:text-[18px] font-medium">Sim, já tentei</span>
           </button>
 
           <button
             onClick={() => handleSelect(false)}
-            className={`w-full py-4 md:py-5 px-4 md:px-6 rounded-[16px] md:rounded-[20px] transition-all duration-200 text-left flex items-center gap-4 ${
+            className={`w-full py-5 md:py-6 px-5 md:px-6 rounded-[16px] md:rounded-[20px] transition-all duration-200 flex items-center gap-4 ${
               answers.triedOtherApps === false
                 ? 'bg-[#1a1a1a] text-white'
                 : 'bg-[#f5f5f5] text-black active:bg-gray-200 hover:bg-gray-200'
             }`}
           >
-            {/* Ícone de X */}
-            <div className={`w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center ${
-              answers.triedOtherApps === false ? 'bg-gray-500' : 'bg-white border border-gray-200'
+            {/* Ícone de X melhorado */}
+            <div className={`w-13 h-13 md:w-14 md:h-14 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
+              answers.triedOtherApps === false ? 'bg-white shadow-md' : 'bg-white border-2 border-gray-300'
             }`}>
               <svg 
-                width="24" 
-                height="24" 
+                width="28" 
+                height="28" 
                 viewBox="0 0 24 24" 
-                fill="none" 
-                stroke={answers.triedOtherApps === false ? 'white' : '#6b7280'}
-                strokeWidth="3"
-                strokeLinecap="round"
+                fill="none"
               >
-                <path d="M6 6l12 12M18 6L6 18"/>
+                <path 
+                  d="M18 6L6 18M6 6l12 12" 
+                  stroke={answers.triedOtherApps === false ? '#1a1a1a' : '#9ca3af'}
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
               </svg>
             </div>
-            <span className="text-[16px] md:text-[17px] font-medium">Não, é minha primeira vez</span>
+            <span className="text-[17px] md:text-[18px] font-medium">Não, é minha primeira vez</span>
           </button>
         </div>
       </div>

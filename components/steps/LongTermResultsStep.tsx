@@ -33,99 +33,135 @@ export default function LongTermResultsStep() {
       <div className="flex-1 flex flex-col justify-center px-6">
         <div className="max-w-md mx-auto w-full">
           {/* Gráfico */}
-          <div className="bg-[#f5f5f5] rounded-[20px] p-6 mb-4">
-            <div className="mb-4">
-              <p className="text-[15px] md:text-[16px] text-gray-600 mb-4">Seu peso</p>
+          <div className="bg-white rounded-[20px] p-5 mb-4 shadow-sm border border-gray-100">
+            <div className="mb-3">
+              <p className="text-[13px] md:text-[14px] text-gray-500 mb-3 font-medium">Seu peso</p>
               
-              {/* SVG do gráfico com animação */}
-              <svg viewBox="0 0 320 180" className="w-full h-auto">
+              {/* SVG do gráfico com animação melhorada */}
+              <svg viewBox="0 0 340 200" className="w-full h-auto">
                 <defs>
+                  {/* Gradiente para a linha vermelha */}
+                  <linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#ff6b6b" stopOpacity="1"/>
+                    <stop offset="100%" stopColor="#ee5a6f" stopOpacity="1"/>
+                  </linearGradient>
+                  
+                  {/* Gradiente para a linha preta */}
+                  <linearGradient id="blackGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#2d2d2d" stopOpacity="1"/>
+                    <stop offset="100%" stopColor="#1a1a1a" stopOpacity="1"/>
+                  </linearGradient>
+                  
+                  {/* Sombra para as linhas */}
+                  <filter id="shadow">
+                    <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.15"/>
+                  </filter>
+                  
                   {/* Definição das animações */}
                   <style>
                     {`
                       .line-red {
-                        stroke-dasharray: 400;
-                        stroke-dashoffset: ${isAnimated ? '0' : '400'};
-                        transition: stroke-dashoffset 2s ease-out;
+                        stroke-dasharray: 500;
+                        stroke-dashoffset: ${isAnimated ? '0' : '500'};
+                        transition: stroke-dashoffset 2.5s cubic-bezier(0.65, 0, 0.35, 1);
                       }
                       .line-black {
-                        stroke-dasharray: 400;
-                        stroke-dashoffset: ${isAnimated ? '0' : '400'};
-                        transition: stroke-dashoffset 2s ease-out 0.3s;
+                        stroke-dasharray: 500;
+                        stroke-dashoffset: ${isAnimated ? '0' : '500'};
+                        transition: stroke-dashoffset 2.5s cubic-bezier(0.65, 0, 0.35, 1) 0.4s;
                       }
-                      .point-start {
+                      .point {
                         opacity: ${isAnimated ? '1' : '0'};
-                        transition: opacity 0.5s ease-out;
+                        transform: ${isAnimated ? 'scale(1)' : 'scale(0)'};
+                        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 2s;
                       }
                       .point-end {
                         opacity: ${isAnimated ? '1' : '0'};
-                        transition: opacity 0.5s ease-out 2s;
+                        transform: ${isAnimated ? 'scale(1)' : 'scale(0)'};
+                        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 2.5s;
                       }
-                      .label-red {
+                      .label {
                         opacity: ${isAnimated ? '1' : '0'};
-                        transition: opacity 0.5s ease-out 1s;
+                        transition: opacity 0.6s ease-out 1.5s;
                       }
                       .badge {
                         opacity: ${isAnimated ? '1' : '0'};
-                        transform: ${isAnimated ? 'translateY(0)' : 'translateY(10px)'};
-                        transition: all 0.5s ease-out 1.5s;
+                        transform: ${isAnimated ? 'translateY(0) scale(1)' : 'translateY(8px) scale(0.95)'};
+                        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 2s;
                       }
                     `}
                   </style>
                 </defs>
 
-                {/* Grid lines */}
-                <line x1="20" y1="40" x2="300" y2="40" stroke="#e0e0e0" strokeWidth="1" strokeDasharray="4 4"/>
-                <line x1="20" y1="90" x2="300" y2="90" stroke="#e0e0e0" strokeWidth="1" strokeDasharray="4 4"/>
-                <line x1="20" y1="140" x2="300" y2="140" stroke="#e0e0e0" strokeWidth="1" strokeDasharray="4 4"/>
+                {/* Grid lines com estilo melhorado */}
+                <line x1="30" y1="50" x2="310" y2="50" stroke="#f0f0f0" strokeWidth="1"/>
+                <line x1="30" y1="90" x2="310" y2="90" stroke="#f0f0f0" strokeWidth="1"/>
+                <line x1="30" y1="130" x2="310" y2="130" stroke="#f0f0f0" strokeWidth="1"/>
                 
-                {/* Linha vermelha - Dieta tradicional */}
+                {/* Linha vermelha - Dieta tradicional com sombra */}
                 <path 
                   className="line-red"
-                  d="M 20,40 Q 80,100 140,80 T 300,20" 
+                  d="M 30,50 Q 90,110 150,90 Q 210,70 310,30" 
                   fill="none" 
-                  stroke="#ff6b6b" 
-                  strokeWidth="3"
+                  stroke="url(#redGradient)" 
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  filter="url(#shadow)"
                 />
                 
-                {/* Linha preta - Dieta Calculada */}
+                {/* Linha preta - Dieta Calculada com sombra */}
                 <path 
                   className="line-black"
-                  d="M 20,40 Q 100,60 160,80 Q 220,100 280,120" 
+                  d="M 30,50 Q 100,65 170,85 Q 240,105 300,125" 
                   fill="none" 
-                  stroke="#1a1a1a" 
-                  strokeWidth="3"
+                  stroke="url(#blackGradient)" 
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  filter="url(#shadow)"
                 />
                 
-                {/* Ponto inicial */}
-                <circle className="point-start" cx="20" cy="40" r="6" fill="#1a1a1a" stroke="white" strokeWidth="2"/>
+                {/* Ponto inicial com animação */}
+                <g className="point">
+                  <circle cx="30" cy="50" r="7" fill="#1a1a1a"/>
+                  <circle cx="30" cy="50" r="5" fill="white" opacity="0.3"/>
+                </g>
                 
-                {/* Ponto final Dieta Calculada */}
-                <circle className="point-end" cx="280" cy="120" r="6" fill="#1a1a1a" stroke="white" strokeWidth="2"/>
+                {/* Ponto final Dieta Calculada com animação */}
+                <g className="point-end">
+                  <circle cx="300" cy="125" r="7" fill="#1a1a1a"/>
+                  <circle cx="300" cy="125" r="5" fill="white" opacity="0.3"/>
+                </g>
+                
+                {/* Ponto final Dieta Tradicional (vermelho) */}
+                <g className="point-end">
+                  <circle cx="310" cy="30" r="6" fill="#ff6b6b"/>
+                  <circle cx="310" cy="30" r="4" fill="white" opacity="0.4"/>
+                </g>
                 
                 {/* Label Dieta tradicional */}
-                <text className="label-red" x="250" y="35" fontSize="12" fill="#ff6b6b" textAnchor="middle" fontWeight="500">
+                <text className="label" x="250" y="25" fontSize="11" fill="#ff6b6b" textAnchor="middle" fontWeight="600">
                   Dieta tradicional
                 </text>
                 
-                {/* Badge Dieta Calculada */}
-                <g className="badge" transform="translate(120, 95)">
-                  <rect x="0" y="0" width="130" height="26" rx="13" fill="#1a1a1a"/>
-                  <text x="14" y="17" fontSize="11" fill="white" fontWeight="600">
+                {/* Badge Dieta Calculada melhorado */}
+                <g className="badge" transform="translate(130, 100)">
+                  <rect x="0" y="0" width="140" height="28" rx="14" fill="#1a1a1a" filter="url(#shadow)"/>
+                  <rect x="1" y="1" width="138" height="26" rx="13" fill="#2d2d2d"/>
+                  <text x="18" y="18" fontSize="11" fill="white" fontWeight="700">
                     🍎 Dieta Calculada
                   </text>
                 </g>
                 
                 {/* Eixo X labels */}
-                <text x="20" y="165" fontSize="13" fill="#666" textAnchor="start">Mês 1</text>
-                <text x="280" y="165" fontSize="13" fill="#666" textAnchor="end">Mês 6</text>
+                <text className="label" x="30" y="175" fontSize="12" fill="#999" textAnchor="start" fontWeight="500">Mês 1</text>
+                <text className="label" x="300" y="175" fontSize="12" fill="#999" textAnchor="end" fontWeight="500">Mês 6</text>
                 
-                {/* Label "Peso" */}
-                <text x="5" y="90" fontSize="11" fill="#999" textAnchor="middle" transform="rotate(-90, 12, 90)">Peso</text>
+                {/* Label "Peso" vertical */}
+                <text className="label" x="10" y="100" fontSize="10" fill="#aaa" textAnchor="middle" transform="rotate(-90, 10, 100)" fontWeight="500">Peso</text>
               </svg>
             </div>
             
-            <p className={`text-[14px] md:text-[15px] text-center text-gray-700 leading-relaxed transition-opacity duration-500 ${isAnimated ? 'opacity-100' : 'opacity-0'}`} style={{ transitionDelay: '2s' }}>
+            <p className={`text-[13px] md:text-[14px] text-center text-gray-700 leading-snug transition-opacity duration-500 ${isAnimated ? 'opacity-100' : 'opacity-0'}`} style={{ transitionDelay: '2.5s' }}>
               80% dos usuários do Dieta Calculada mantêm seu resultado mesmo 6 meses depois
             </p>
           </div>

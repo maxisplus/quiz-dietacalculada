@@ -12,6 +12,9 @@ export interface QuizAnswers {
   obstacles?: string[];
   heardFrom?: string;
   triedOtherApps?: boolean;
+  name?: string;
+  email?: string;
+  phone?: string;
   unit?: 'imperial' | 'metric';
   heightFt?: number;
   heightIn?: number;
