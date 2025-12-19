@@ -121,33 +121,33 @@ body {
   animation: slideInRight 0.4s ease-out;
 }
 
-/* Page transition animations */
-@keyframes pageEnter {
+/* Page transition animations - Improved */
+@keyframes pageSlideIn {
   from {
     opacity: 0;
-    transform: translateX(20px);
+    transform: translateX(24px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
   }
 }
 
-@keyframes pageEnterUp {
+@keyframes pageSlideOut {
   from {
-    opacity: 0;
-    transform: translateY(30px);
+    opacity: 1;
+    transform: translateX(0) scale(1);
   }
   to {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 0;
+    transform: translateX(-24px) scale(0.98);
   }
 }
 
-@keyframes contentFadeIn {
+@keyframes pageFadeScale {
   from {
     opacity: 0;
-    transform: scale(0.98);
+    transform: scale(0.96);
   }
   to {
     opacity: 1;
@@ -155,16 +155,16 @@ body {
   }
 }
 
-.animate-page-enter {
-  animation: pageEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.animate-page-slide-in {
+  animation: pageSlideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-.animate-page-enter-up {
-  animation: pageEnterUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.animate-page-slide-out {
+  animation: pageSlideOut 0.25s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 
-.animate-content-fade {
-  animation: contentFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.animate-page-fade-scale {
+  animation: pageFadeScale 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* Staggered animations for children */
@@ -236,6 +236,61 @@ body {
 
 .option-animate:active {
   transform: scale(0.98);
+}
+
+/* Range input styling for better mobile support */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 100%;
+  background: transparent;
+}
+
+/* Firefox */
+input[type="range"]::-moz-range-thumb {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  border-radius: 50%;
+}
+
+input[type="range"]::-moz-range-track {
+  height: 100%;
+  background: transparent;
+  border: none;
+}
+
+/* Focus states */
+input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+input[type="range"]:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
 }
 
 .animate-pulse-subtle {

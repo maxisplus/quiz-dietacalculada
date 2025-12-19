@@ -145,12 +145,12 @@ export default function DesiredWeightStep() {
           )}
 
           {/* Ruler/Slider Container */}
-          <div className="relative mb-8">
+          <div className="relative mb-8 touch-none">
             {/* Ruler background with gradient */}
-            <div className="relative h-20 overflow-hidden rounded-lg">
+            <div className="relative h-24 md:h-20 overflow-visible rounded-lg bg-gray-50">
               {/* Gradient overlay */}
               <div 
-                className="absolute inset-0"
+                className="absolute inset-0 rounded-lg"
                 style={{
                   background: `linear-gradient(to right, transparent 0%, transparent ${selectedPosition}%, #e5e7eb ${selectedPosition}%, #d1d5db 100%)`
                 }}
@@ -167,7 +167,7 @@ export default function DesiredWeightStep() {
               />
               
               {/* Ruler marks */}
-              <div className="absolute inset-0 flex items-end px-2">
+              <div className="absolute inset-0 flex items-end px-2 pointer-events-none">
                 {marks.filter((_, i) => i % 2 === 0).map((mark) => {
                   const position = ((mark - minWeight) / (maxWeight - minWeight)) * 100;
                   const height = getMarkHeight(mark);
@@ -185,7 +185,7 @@ export default function DesiredWeightStep() {
                       <div
                         className="transition-all duration-150"
                         style={{
-                          width: '1px',
+                          width: '2px',
                           height: `${height}px`,
                           backgroundColor: color,
                         }}
@@ -195,18 +195,27 @@ export default function DesiredWeightStep() {
                 })}
               </div>
               
-              {/* Selected indicator line - vertical bar */}
+              {/* Selected indicator line - vertical bar com thumb */}
               <div
-                className={`absolute bottom-0 w-1 z-10 rounded-t ${isValidWeight() ? 'bg-[#1a1a1a]' : 'bg-red-500'}`}
+                className={`absolute bottom-0 z-10 flex flex-col items-center pointer-events-none`}
                 style={{
                   left: `${selectedPosition}%`,
                   transform: 'translateX(-50%)',
-                  height: '32px',
                 }}
-              />
+              >
+                {/* Linha vertical */}
+                <div 
+                  className={`w-1 rounded-t ${isValidWeight() ? 'bg-[#1a1a1a]' : 'bg-red-500'}`}
+                  style={{ height: '32px' }}
+                />
+                {/* Thumb (bolinha) */}
+                <div 
+                  className={`w-6 h-6 rounded-full shadow-lg -mt-1 ${isValidWeight() ? 'bg-[#1a1a1a]' : 'bg-red-500'}`}
+                />
+              </div>
             </div>
 
-            {/* Slider input - invisible overlay */}
+            {/* Slider input - melhorado para mobile */}
             <input
               ref={sliderRef}
               type="range"
@@ -215,8 +224,12 @@ export default function DesiredWeightStep() {
               step={0.1}
               value={desiredWeight}
               onChange={(e) => setDesiredWeight(parseFloat(e.target.value))}
-              className="absolute top-0 left-0 w-full h-20 opacity-0 cursor-pointer z-20"
-              style={{ WebkitAppearance: 'none' }}
+              className="absolute top-0 left-0 w-full h-24 md:h-20 opacity-0 cursor-pointer z-20"
+              style={{ 
+                WebkitAppearance: 'none',
+                appearance: 'none',
+                touchAction: 'pan-x',
+              }}
             />
           </div>
 

@@ -19,20 +19,29 @@ export default function QuizLayout({
   const params = useParams();
   const stepFromUrl = parseInt(params.step as string, 10);
   
-  const [isAnimating, setIsAnimating] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [animationKey, setAnimationKey] = useState(stepFromUrl);
+  const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
 
   // Reset animation when step changes
   useEffect(() => {
+    // Detectar direção
+    if (stepFromUrl > animationKey) {
+      setDirection('forward');
+    } else if (stepFromUrl < animationKey) {
+      setDirection('backward');
+    }
+
     setIsAnimating(false);
-    // Small delay to reset animation
+    
+    // Delay para reset
     const timeout = setTimeout(() => {
       setAnimationKey(stepFromUrl);
       setIsAnimating(true);
     }, 50);
     
     return () => clearTimeout(timeout);
-  }, [stepFromUrl]);
+  }, [stepFromUrl, animationKey]);
 
   const handleBack = () => {
     previousStep();
@@ -40,9 +49,9 @@ export default function QuizLayout({
   };
 
   return (
-    <div className="fixed inset-0 bg-white flex flex-col">
+    <div className="fixed inset-0 bg-white flex flex-col overflow-hidden">
       {/* Header com progress bar */}
-      <div className="flex-shrink-0 px-4 md:px-6 pt-3 md:pt-4 pb-2">
+      <div className="flex-shrink-0 px-4 md:px-6 pt-3 md:pt-4 pb-2 z-10">
         <div className="flex items-center gap-4 max-w-md mx-auto">
           {showBackButton ? (
             <button
@@ -73,17 +82,19 @@ export default function QuizLayout({
         </div>
       </div>
 
-      {/* Content with animation */}
-      <div className="flex-1 overflow-hidden">
+      {/* Content with improved animation */}
+      <div className="flex-1 overflow-hidden relative">
         <div 
           key={animationKey}
-          className={`h-full transition-all duration-300 ${
-            isAnimating 
-              ? 'opacity-100 translate-x-0' 
-              : 'opacity-0 translate-x-4'
-          }`}
+          className="h-full w-full absolute inset-0"
           style={{
-            animation: isAnimating ? 'pageEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards' : 'none'
+            opacity: isAnimating ? 1 : 0,
+            transform: isAnimating 
+              ? 'translateX(0) scale(1)' 
+              : direction === 'forward' 
+                ? 'translateX(30px) scale(0.98)' 
+                : 'translateX(-30px) scale(0.98)',
+            transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         >
           {children}
