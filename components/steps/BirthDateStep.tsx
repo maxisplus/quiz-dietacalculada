@@ -1,70 +1,70 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuizStore } from '@/store/quizStore';
 
 export default function BirthDateStep() {
   const router = useRouter();
   const { updateAnswer, nextStep, currentStep, answers } = useQuizStore();
-  const [day, setDay] = useState(answers.birthDate?.getDate() || 1);
+  
+  const [day, setDay] = useState(answers.birthDate?.getDate() || 15);
   const [month, setMonth] = useState(
     answers.birthDate?.getMonth() !== undefined
       ? answers.birthDate.getMonth() + 1
-      : 1
+      : 6
   );
-  const [year, setYear] = useState(
-    answers.birthDate?.getFullYear() || 2000
-  );
-
-  // Refs para scroll automático
-  const monthRef = useRef<HTMLDivElement>(null);
-  const dayRef = useRef<HTMLDivElement>(null);
-  const yearRef = useRef<HTMLDivElement>(null);
+  const [year, setYear] = useState(answers.birthDate?.getFullYear() || 2000);
 
   const months = [
-    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+    { value: 1, label: 'Janeiro', short: 'Jan' },
+    { value: 2, label: 'Fevereiro', short: 'Fev' },
+    { value: 3, label: 'Março', short: 'Mar' },
+    { value: 4, label: 'Abril', short: 'Abr' },
+    { value: 5, label: 'Maio', short: 'Mai' },
+    { value: 6, label: 'Junho', short: 'Jun' },
+    { value: 7, label: 'Julho', short: 'Jul' },
+    { value: 8, label: 'Agosto', short: 'Ago' },
+    { value: 9, label: 'Setembro', short: 'Set' },
+    { value: 10, label: 'Outubro', short: 'Out' },
+    { value: 11, label: 'Novembro', short: 'Nov' },
+    { value: 12, label: 'Dezembro', short: 'Dez' },
   ];
 
   const daysInMonth = new Date(year, month, 0).getDate();
-  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-  const years = Array.from(
-    { length: 80 },
-    (_, i) => new Date().getFullYear() - 10 - i
-  );
+  const currentYear = new Date().getFullYear();
 
-  // Scroll para o valor selecionado ao montar
-  useEffect(() => {
-    const scrollToSelected = () => {
-      const itemHeight = 56; // altura aproximada de cada item (py-4 = 16px * 2 + font)
-      
-      // Scroll para o mês
-      if (monthRef.current) {
-        monthRef.current.scrollTop = Math.max(0, (month - 2) * itemHeight);
-      }
-      
-      // Scroll para o dia
-      if (dayRef.current) {
-        dayRef.current.scrollTop = Math.max(0, (day - 2) * itemHeight);
-      }
-      
-      // Scroll para o ano
-      if (yearRef.current) {
-        const yearIndex = years.indexOf(year);
-        yearRef.current.scrollTop = Math.max(0, (yearIndex - 1) * itemHeight);
-      }
-    };
-    
-    setTimeout(scrollToSelected, 100);
-  }, []);
+  const handleDayChange = (delta: number) => {
+    setDay(prev => {
+      const newDay = prev + delta;
+      if (newDay < 1) return daysInMonth;
+      if (newDay > daysInMonth) return 1;
+      return newDay;
+    });
+  };
+
+  const handleMonthChange = (delta: number) => {
+    setMonth(prev => {
+      const newMonth = prev + delta;
+      if (newMonth < 1) return 12;
+      if (newMonth > 12) return 1;
+      return newMonth;
+    });
+  };
+
+  const handleYearChange = (delta: number) => {
+    setYear(prev => Math.max(1920, Math.min(currentYear - 10, prev + delta)));
+  };
 
   const handleContinue = () => {
-    const birthDate = new Date(year, month - 1, day);
+    const birthDate = new Date(year, month - 1, Math.min(day, daysInMonth));
     updateAnswer('birthDate', birthDate);
     nextStep();
     router.push(`/quiz/${currentStep + 1}`);
   };
+
+  // Calcular idade
+  const age = currentYear - year;
 
   return (
     <div className="h-full flex flex-col bg-white">
@@ -78,91 +78,139 @@ export default function BirthDateStep() {
       {/* Conteúdo */}
       <div className="flex-1 flex flex-col justify-center px-6">
         <div className="max-w-md mx-auto w-full">
-          <div className="flex gap-3 justify-center">
-            {/* Month */}
-            <div className="flex-1 relative">
-              <div 
-                ref={monthRef}
-                className="h-48 overflow-y-scroll scrollbar-hide bg-[#f5f5f5] rounded-[16px] md:rounded-[20px]"
-              >
-                {months.map((m, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setMonth(idx + 1)}
-                    className={`w-full py-4 px-4 text-left transition-all ${
-                      month === idx + 1
-                        ? 'bg-[#e5e5e5] text-black font-semibold text-[17px] md:text-[18px]'
-                        : 'text-gray-400 text-[15px] md:text-[16px]'
-                    }`}
-                  >
-                    {m}
-                  </button>
-                ))}
-              </div>
-              {/* Indicador de scroll */}
-              <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#f5f5f5] to-transparent rounded-b-[16px] pointer-events-none flex items-end justify-center pb-1">
-                <svg className="w-4 h-4 text-gray-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
+          
+          {/* Data selecionada em destaque */}
+          <div className="text-center mb-8">
+            <div className="text-[20px] text-gray-500 mb-2">Sua data de nascimento</div>
+            <div className="text-[32px] md:text-[36px] font-bold text-black">
+              {day} de {months[month - 1].label} de {year}
             </div>
-
-            {/* Day */}
-            <div className="w-20 relative">
-              <div 
-                ref={dayRef}
-                className="h-48 overflow-y-scroll scrollbar-hide bg-[#f5f5f5] rounded-[16px] md:rounded-[20px]"
-              >
-                {days.map((d) => (
-                  <button
-                    key={d}
-                    onClick={() => setDay(d)}
-                    className={`w-full py-4 text-center transition-all ${
-                      day === d
-                        ? 'bg-[#e5e5e5] text-black font-semibold text-[17px] md:text-[18px]'
-                        : 'text-gray-400 text-[15px] md:text-[16px]'
-                    }`}
-                  >
-                    {d}
-                  </button>
-                ))}
-              </div>
-              {/* Indicador de scroll */}
-              <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#f5f5f5] to-transparent rounded-b-[16px] pointer-events-none flex items-end justify-center pb-1">
-                <svg className="w-4 h-4 text-gray-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Year */}
-            <div className="w-24 relative">
-              <div 
-                ref={yearRef}
-                className="h-48 overflow-y-scroll scrollbar-hide bg-[#f5f5f5] rounded-[16px] md:rounded-[20px]"
-              >
-                {years.map((y) => (
-                  <button
-                    key={y}
-                    onClick={() => setYear(y)}
-                    className={`w-full py-4 text-center transition-all ${
-                      year === y
-                        ? 'bg-[#e5e5e5] text-black font-semibold text-[17px] md:text-[18px]'
-                        : 'text-gray-400 text-[15px] md:text-[16px]'
-                    }`}
-                  >
-                    {y}
-                  </button>
-                ))}
-              </div>
-              {/* Indicador de scroll */}
-              <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#f5f5f5] to-transparent rounded-b-[16px] pointer-events-none flex items-end justify-center pb-1">
-                <svg className="w-4 h-4 text-gray-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
+            <div className="text-[16px] text-gray-500 mt-2">
+              {age} anos
             </div>
           </div>
+
+          {/* Seletores */}
+          <div className="grid grid-cols-3 gap-3">
+            
+            {/* Dia */}
+            <div className="bg-[#f5f5f5] rounded-[16px] p-4">
+              <label className="block text-[12px] font-medium text-gray-500 mb-3 text-center uppercase tracking-wide">
+                Dia
+              </label>
+              
+              <div className="flex flex-col items-center gap-2">
+                <button
+                  onClick={() => handleDayChange(1)}
+                  className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:bg-gray-100 active:scale-95 transition-all"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 15l7-7 7 7" />
+                  </svg>
+                </button>
+
+                <span className="text-[32px] font-bold text-black leading-none py-2">
+                  {day.toString().padStart(2, '0')}
+                </span>
+
+                <button
+                  onClick={() => handleDayChange(-1)}
+                  className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:bg-gray-100 active:scale-95 transition-all"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Mês */}
+            <div className="bg-[#f5f5f5] rounded-[16px] p-4">
+              <label className="block text-[12px] font-medium text-gray-500 mb-3 text-center uppercase tracking-wide">
+                Mês
+              </label>
+              
+              <div className="flex flex-col items-center gap-2">
+                <button
+                  onClick={() => handleMonthChange(1)}
+                  className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:bg-gray-100 active:scale-95 transition-all"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 15l7-7 7 7" />
+                  </svg>
+                </button>
+
+                <span className="text-[24px] md:text-[28px] font-bold text-black leading-none py-2">
+                  {months[month - 1].short}
+                </span>
+
+                <button
+                  onClick={() => handleMonthChange(-1)}
+                  className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:bg-gray-100 active:scale-95 transition-all"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Ano */}
+            <div className="bg-[#f5f5f5] rounded-[16px] p-4">
+              <label className="block text-[12px] font-medium text-gray-500 mb-3 text-center uppercase tracking-wide">
+                Ano
+              </label>
+              
+              <div className="flex flex-col items-center gap-2">
+                <button
+                  onClick={() => handleYearChange(1)}
+                  className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:bg-gray-100 active:scale-95 transition-all"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 15l7-7 7 7" />
+                  </svg>
+                </button>
+
+                <span className="text-[28px] md:text-[32px] font-bold text-black leading-none py-2">
+                  {year}
+                </span>
+
+                <button
+                  onClick={() => handleYearChange(-1)}
+                  className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:bg-gray-100 active:scale-95 transition-all"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Slider para ano (ajuste rápido) */}
+          <div className="mt-6 bg-[#f5f5f5] rounded-[16px] p-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[12px] text-gray-500">Ajuste rápido do ano</span>
+              <span className="text-[14px] font-semibold text-black">{year}</span>
+            </div>
+            <input
+              type="range"
+              min="1920"
+              max={currentYear - 10}
+              value={year}
+              onChange={(e) => setYear(parseInt(e.target.value))}
+              className="w-full h-2 bg-gray-300 rounded-full appearance-none cursor-pointer"
+              style={{
+                background: `linear-gradient(to right, #1a1a1a 0%, #1a1a1a ${((year - 1920) / (currentYear - 10 - 1920)) * 100}%, #d1d5db ${((year - 1920) / (currentYear - 10 - 1920)) * 100}%, #d1d5db 100%)`
+              }}
+            />
+            <div className="flex justify-between mt-2 text-[11px] text-gray-400">
+              <span>1920</span>
+              <span>{currentYear - 10}</span>
+            </div>
+          </div>
+
         </div>
       </div>
 

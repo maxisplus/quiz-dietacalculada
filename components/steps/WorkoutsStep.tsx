@@ -8,19 +8,25 @@ const workoutOptions = [
     id: '0-2', 
     label: '0-2', 
     description: 'Treinos de vez em quando',
-    icon: 'dot'
+    emoji: '🚶',
+    bgColor: 'bg-blue-100',
+    bgColorSelected: 'bg-blue-500'
   },
   { 
     id: '3-5', 
     label: '3-5', 
     description: 'Alguns treinos por semana',
-    icon: 'triangle'
+    emoji: '🏃',
+    bgColor: 'bg-orange-100',
+    bgColorSelected: 'bg-orange-500'
   },
   { 
     id: '6+', 
     label: '6+', 
     description: 'Atleta dedicado',
-    icon: 'vertical'
+    emoji: '💪',
+    bgColor: 'bg-green-100',
+    bgColorSelected: 'bg-green-500'
   },
 ];
 
@@ -36,55 +42,6 @@ export default function WorkoutsStep() {
     if (answers.workoutsPerWeek) {
       nextStep();
       router.push(`/quiz/${currentStep + 1}`);
-    }
-  };
-
-  const renderIcon = (iconType: string, isSelected: boolean) => {
-    const bgClass = isSelected ? 'bg-white shadow-sm' : 'bg-white border-2 border-gray-200';
-    const iconColor = isSelected ? '#1a1a1a' : '#6b7280';
-    
-    switch (iconType) {
-      case 'dot':
-        // Ícone de caminhada/leve
-        return (
-          <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center ${bgClass} transition-all`}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="4.5" r="2" fill={iconColor}/>
-              <path d="M12 8c-1 0-2 1-2 2v3l-2 6h1.5l1.5-4 1.5 4H14l-2-6V10c0-1-1-2-2-2z" fill={iconColor}/>
-              <path d="M10 19h4" stroke={iconColor} strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          </div>
-        );
-      case 'triangle':
-        // Ícone de corrida/moderado
-        return (
-          <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center ${bgClass} transition-all`}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-              <circle cx="14" cy="3.5" r="2" fill={iconColor}/>
-              <path d="M13 7l-5 5 2 2 3-3 2 3 2-2-3-4-1-1z" fill={iconColor}/>
-              <path d="M7 17l2-4 2 1" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M15 12l1 6 2-1" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-        );
-      case 'vertical':
-        // Ícone de musculação/intenso
-        return (
-          <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center ${bgClass} transition-all`}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="4" r="2" fill={iconColor}/>
-              <rect x="2" y="9" width="4" height="6" rx="1" fill={iconColor}/>
-              <rect x="18" y="9" width="4" height="6" rx="1" fill={iconColor}/>
-              <rect x="6" y="10.5" width="2" height="3" rx="0.5" fill={iconColor}/>
-              <rect x="16" y="10.5" width="2" height="3" rx="0.5" fill={iconColor}/>
-              <line x1="8" y1="12" x2="16" y2="12" stroke={iconColor} strokeWidth="2.5" strokeLinecap="round"/>
-              <path d="M10 17l2-3 2 3" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M10 20h4" stroke={iconColor} strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          </div>
-        );
-      default:
-        return null;
     }
   };
 
@@ -106,24 +63,43 @@ export default function WorkoutsStep() {
               <button
                 key={option.id}
                 onClick={() => handleSelect(option.id)}
-                className={`w-full py-4 md:py-5 px-4 md:px-6 rounded-[16px] md:rounded-[20px] transition-all duration-200 text-left flex items-center gap-3 md:gap-4 ${
+                className={`w-full py-4 md:py-5 px-4 md:px-5 rounded-[16px] md:rounded-[20px] transition-all duration-200 text-left flex items-center gap-4 ${
                   isSelected
-                    ? 'bg-[#1a1a1a] text-white'
+                    ? 'bg-[#1a1a1a] text-white shadow-lg'
                     : 'bg-[#f5f5f5] text-black active:bg-gray-200 hover:bg-gray-200'
                 }`}
               >
-                {renderIcon(option.icon, isSelected)}
+                {/* Emoji Icon */}
+                <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center transition-all ${
+                  isSelected ? option.bgColorSelected : option.bgColor
+                }`}>
+                  <span className="text-[28px] md:text-[32px]">{option.emoji}</span>
+                </div>
+                
                 <div className="flex-1 min-w-0">
-                  <div className={`text-[16px] md:text-[17px] font-semibold ${
+                  <div className={`text-[18px] md:text-[19px] font-bold ${
                     isSelected ? 'text-white' : 'text-black'
                   }`}>
                     {option.label}
                   </div>
                   <div className={`text-[14px] md:text-[15px] ${
-                    isSelected ? 'text-white/80' : 'text-gray-600'
+                    isSelected ? 'text-white/80' : 'text-gray-500'
                   }`}>
                     {option.description}
                   </div>
+                </div>
+
+                {/* Indicador de seleção */}
+                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                  isSelected 
+                    ? 'border-white bg-white' 
+                    : 'border-gray-300'
+                }`}>
+                  {isSelected && (
+                    <svg className="w-4 h-4 text-[#1a1a1a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
                 </div>
               </button>
             );
@@ -150,4 +126,3 @@ export default function WorkoutsStep() {
     </div>
   );
 }
-

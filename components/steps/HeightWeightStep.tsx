@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useQuizStore } from '@/store/quizStore';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function HeightWeightStep() {
   const router = useRouter();
@@ -11,33 +11,13 @@ export default function HeightWeightStep() {
   const [heightCm, setHeightCm] = useState(answers.heightCm || 170);
   const [weightKg, setWeightKg] = useState(answers.weightKg || 70);
 
-  // Refs para scroll automático
-  const heightRef = useRef<HTMLDivElement>(null);
-  const weightRef = useRef<HTMLDivElement>(null);
+  const handleHeightChange = (delta: number) => {
+    setHeightCm(prev => Math.max(120, Math.min(240, prev + delta)));
+  };
 
-  // Gerar arrays de valores
-  const cmOptions = Array.from({ length: 121 }, (_, i) => 120 + i); // 120-240 cm
-  const kgOptions = Array.from({ length: 151 }, (_, i) => 30 + i); // 30-180 kg
-
-  // Scroll para o valor selecionado ao montar
-  useEffect(() => {
-    const scrollToSelected = () => {
-      // Scroll para altura em cm
-      if (heightRef.current) {
-        const index = cmOptions.indexOf(heightCm);
-        const itemHeight = 48; // altura aproximada de cada item
-        heightRef.current.scrollTop = Math.max(0, (index - 1) * itemHeight);
-      }
-      // Scroll para peso em kg
-      if (weightRef.current) {
-        const index = kgOptions.indexOf(weightKg);
-        const itemHeight = 48;
-        weightRef.current.scrollTop = Math.max(0, (index - 1) * itemHeight);
-      }
-    };
-    
-    setTimeout(scrollToSelected, 100);
-  }, [heightCm, weightKg]);
+  const handleWeightChange = (delta: number) => {
+    setWeightKg(prev => Math.max(30, Math.min(200, prev + delta)));
+  };
 
   const handleContinue = () => {
     updateAnswer('heightCm', heightCm);
@@ -58,77 +38,116 @@ export default function HeightWeightStep() {
 
       {/* Conteúdo */}
       <div className="flex-1 flex flex-col justify-center px-6">
-        <div className="max-w-md mx-auto w-full">
-          {/* Pickers */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            {/* Altura */}
-            <div>
-              <h3 className="text-[16px] md:text-[17px] font-semibold text-black mb-3 text-center">
-                Altura (cm)
-              </h3>
-              
-              <div className="relative">
-                <div 
-                  ref={heightRef}
-                  className="h-44 overflow-y-scroll bg-[#f5f5f5] rounded-[16px] md:rounded-[20px] scrollbar-hide"
-                >
-                  {cmOptions.map((cm) => (
-                    <button
-                      key={cm}
-                      onClick={() => setHeightCm(cm)}
-                      className={`w-full py-3 text-center transition-all ${
-                        heightCm === cm
-                          ? 'bg-[#e5e5e5] text-black font-semibold text-[17px] md:text-[18px]'
-                          : 'text-gray-400 text-[15px] md:text-[16px]'
-                      }`}
-                    >
-                      {cm} cm
-                    </button>
-                  ))}
-                </div>
-                {/* Indicador de scroll */}
-                <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#f5f5f5] to-transparent rounded-b-[16px] pointer-events-none flex items-end justify-center pb-1">
-                  <svg className="w-4 h-4 text-gray-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
+        <div className="max-w-md mx-auto w-full space-y-8">
+          
+          {/* Altura */}
+          <div className="bg-[#f5f5f5] rounded-[20px] p-6">
+            <label className="block text-[14px] font-medium text-gray-500 mb-4 text-center uppercase tracking-wide">
+              Altura
+            </label>
+            
+            <div className="flex items-center justify-center gap-4">
+              {/* Botão diminuir */}
+              <button
+                onClick={() => handleHeightChange(-1)}
+                className="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:bg-gray-100 active:scale-95 transition-all"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M20 12H4" />
+                </svg>
+              </button>
+
+              {/* Valor */}
+              <div className="w-32 text-center">
+                <span className="text-[48px] font-bold text-black leading-none">{heightCm}</span>
+                <span className="text-[18px] text-gray-500 ml-1">cm</span>
               </div>
+
+              {/* Botão aumentar */}
+              <button
+                onClick={() => handleHeightChange(1)}
+                className="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:bg-gray-100 active:scale-95 transition-all"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                </svg>
+              </button>
             </div>
 
-            {/* Peso */}
-            <div>
-              <h3 className="text-[16px] md:text-[17px] font-semibold text-black mb-3 text-center">
-                Peso (kg)
-              </h3>
-              
-              <div className="relative">
-                <div 
-                  ref={weightRef}
-                  className="h-44 overflow-y-scroll bg-[#f5f5f5] rounded-[16px] md:rounded-[20px] scrollbar-hide"
-                >
-                  {kgOptions.map((kg) => (
-                    <button
-                      key={kg}
-                      onClick={() => setWeightKg(kg)}
-                      className={`w-full py-3 text-center transition-all ${
-                        weightKg === kg
-                          ? 'bg-[#e5e5e5] text-black font-semibold text-[17px] md:text-[18px]'
-                          : 'text-gray-400 text-[15px] md:text-[16px]'
-                      }`}
-                    >
-                      {kg} kg
-                    </button>
-                  ))}
-                </div>
-                {/* Indicador de scroll */}
-                <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#f5f5f5] to-transparent rounded-b-[16px] pointer-events-none flex items-end justify-center pb-1">
-                  <svg className="w-4 h-4 text-gray-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
+            {/* Slider */}
+            <div className="mt-5">
+              <input
+                type="range"
+                min="120"
+                max="240"
+                value={heightCm}
+                onChange={(e) => setHeightCm(parseInt(e.target.value))}
+                className="w-full h-2 bg-gray-300 rounded-full appearance-none cursor-pointer accent-black"
+                style={{
+                  background: `linear-gradient(to right, #1a1a1a 0%, #1a1a1a ${((heightCm - 120) / 120) * 100}%, #d1d5db ${((heightCm - 120) / 120) * 100}%, #d1d5db 100%)`
+                }}
+              />
+              <div className="flex justify-between mt-2 text-[12px] text-gray-400">
+                <span>120 cm</span>
+                <span>240 cm</span>
               </div>
             </div>
           </div>
+
+          {/* Peso */}
+          <div className="bg-[#f5f5f5] rounded-[20px] p-6">
+            <label className="block text-[14px] font-medium text-gray-500 mb-4 text-center uppercase tracking-wide">
+              Peso
+            </label>
+            
+            <div className="flex items-center justify-center gap-4">
+              {/* Botão diminuir */}
+              <button
+                onClick={() => handleWeightChange(-1)}
+                className="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:bg-gray-100 active:scale-95 transition-all"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M20 12H4" />
+                </svg>
+              </button>
+
+              {/* Valor */}
+              <div className="w-32 text-center">
+                <span className="text-[48px] font-bold text-black leading-none">{weightKg}</span>
+                <span className="text-[18px] text-gray-500 ml-1">kg</span>
+              </div>
+
+              {/* Botão aumentar */}
+              <button
+                onClick={() => handleWeightChange(1)}
+                className="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 hover:bg-gray-100 active:scale-95 transition-all"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Slider */}
+            <div className="mt-5">
+              <input
+                type="range"
+                min="30"
+                max="200"
+                value={weightKg}
+                onChange={(e) => setWeightKg(parseInt(e.target.value))}
+                className="w-full h-2 bg-gray-300 rounded-full appearance-none cursor-pointer accent-black"
+                style={{
+                  background: `linear-gradient(to right, #1a1a1a 0%, #1a1a1a ${((weightKg - 30) / 170) * 100}%, #d1d5db ${((weightKg - 30) / 170) * 100}%, #d1d5db 100%)`
+                }}
+              />
+              <div className="flex justify-between mt-2 text-[12px] text-gray-400">
+                <span>30 kg</span>
+                <span>200 kg</span>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -146,4 +165,3 @@ export default function HeightWeightStep() {
     </div>
   );
 }
-

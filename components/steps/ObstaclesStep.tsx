@@ -4,79 +4,12 @@ import { useRouter } from 'next/navigation';
 import { useQuizStore } from '@/store/quizStore';
 
 const obstacles = [
-  { id: 'consistencia', label: 'Falta de consistência' },
-  { id: 'habitos', label: 'Hábitos alimentares não saudáveis' },
-  { id: 'apoio', label: 'Falta de apoio' },
-  { id: 'agenda', label: 'Agenda lotada' },
-  { id: 'inspiracao', label: 'Falta de inspiração para refeições' },
+  { id: 'consistencia', label: 'Falta de consistência', emoji: '📊', bgColor: 'bg-red-100', bgColorSelected: 'bg-red-500' },
+  { id: 'habitos', label: 'Hábitos alimentares ruins', emoji: '🍔', bgColor: 'bg-orange-100', bgColorSelected: 'bg-orange-500' },
+  { id: 'apoio', label: 'Falta de apoio', emoji: '🤝', bgColor: 'bg-purple-100', bgColorSelected: 'bg-purple-500' },
+  { id: 'agenda', label: 'Agenda lotada', emoji: '⏰', bgColor: 'bg-blue-100', bgColorSelected: 'bg-blue-500' },
+  { id: 'inspiracao', label: 'Falta de inspiração', emoji: '💡', bgColor: 'bg-yellow-100', bgColorSelected: 'bg-yellow-500' },
 ];
-
-const renderIcon = (id: string, isSelected: boolean) => {
-  const bgClass = isSelected ? 'bg-white' : 'bg-white border border-gray-200';
-  
-  switch (id) {
-    case 'consistencia':
-      // Ícone de gráfico com seta para baixo
-      return (
-        <div className={`w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center ${bgClass}`}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 3v18h18"/>
-            <path d="M7 14l4-4 4 4 5-5"/>
-            <path d="M17 9l3 0 0 3"/>
-          </svg>
-        </div>
-      );
-    case 'habitos':
-      // Ícone de hambúrguer/fast food
-      return (
-        <div className={`w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center ${bgClass}`}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 18h16c0 0 1 0 1 1s-1 1-1 1H4s-1 0-1-1 1-1 1-1z" fill="black"/>
-            <path d="M4 10h16c1.1 0 2-.9 2-2s-.9-2-2-2H4c-1.1 0-2 .9-2 2s.9 2 2 2z" fill="black"/>
-            <path d="M5 10v1c0 .5.2 1 .5 1.4l.5.6M19 10v1c0 .5-.2 1-.5 1.4l-.5.6"/>
-            <path d="M6 14h12"/>
-            <path d="M4 18c0-1.7 1.3-3 3-3h10c1.7 0 3 1.3 3 3"/>
-          </svg>
-        </div>
-      );
-    case 'apoio':
-      // Ícone de duas pessoas/suporte
-      return (
-        <div className={`w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center ${bgClass}`}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="9" cy="7" r="3" fill="black"/>
-            <circle cx="17" cy="7" r="2" fill="black"/>
-            <path d="M5 21v-2a4 4 0 0 1 4-4h2"/>
-            <path d="M15 21v-1a3 3 0 0 1 3-3h1"/>
-            <path d="M12 14l-1-1"/>
-          </svg>
-        </div>
-      );
-    case 'agenda':
-      // Ícone de relógio/tempo
-      return (
-        <div className={`w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center ${bgClass}`}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M12 6v6l4 2"/>
-          </svg>
-        </div>
-      );
-    case 'inspiracao':
-      // Ícone de lâmpada/ideia
-      return (
-        <div className={`w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center ${bgClass}`}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M9 18h6"/>
-            <path d="M10 22h4"/>
-            <path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z" fill="black"/>
-          </svg>
-        </div>
-      );
-    default:
-      return null;
-  }
-};
 
 export default function ObstaclesStep() {
   const router = useRouter();
@@ -101,34 +34,58 @@ export default function ObstaclesStep() {
     <div className="h-full flex flex-col bg-white">
       {/* Header */}
       <div className="px-6 pt-4">
-        <h1 className="text-[32px] md:text-[40px] font-bold text-black mb-3 leading-tight max-w-md mx-auto">
-          O que está impedindo você de atingir seus objetivos?
+        <h1 className="text-[32px] md:text-[40px] font-bold text-black mb-2 leading-tight max-w-md mx-auto">
+          O que está te impedindo?
         </h1>
+        <p className="text-[15px] md:text-[16px] text-gray-500 max-w-md mx-auto">
+          Selecione todas que se aplicam
+        </p>
       </div>
 
       {/* Conteúdo */}
-      <div className="flex-1 flex flex-col justify-center px-6">
+      <div className="flex-1 flex flex-col justify-center px-6 overflow-y-auto py-4">
         <div className="space-y-3 max-w-md mx-auto w-full">
-            {obstacles.map((obstacle) => {
-              const isSelected = answers.obstacles?.includes(obstacle.id) || false;
-              return (
-                <button
-                  key={obstacle.id}
-                  onClick={() => handleToggle(obstacle.id)}
-                  className={`w-full py-4 md:py-5 px-4 md:px-5 rounded-[16px] md:rounded-[20px] transition-all duration-200 text-left flex items-center gap-4 ${
-                    isSelected
-                      ? 'bg-[#1a1a1a] text-white'
-                      : 'bg-[#f5f5f5] text-black active:bg-gray-200 hover:bg-gray-200'
-                  }`}
-                >
-                  {renderIcon(obstacle.id, isSelected)}
-                  <span className="text-[16px] md:text-[17px] font-medium flex-1">
-                    {obstacle.label}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+          {obstacles.map((obstacle) => {
+            const isSelected = answers.obstacles?.includes(obstacle.id) || false;
+            return (
+              <button
+                key={obstacle.id}
+                onClick={() => handleToggle(obstacle.id)}
+                className={`w-full py-3 md:py-4 px-4 md:px-5 rounded-[16px] md:rounded-[20px] transition-all duration-200 text-left flex items-center gap-3 md:gap-4 ${
+                  isSelected
+                    ? 'bg-[#1a1a1a] text-white shadow-lg'
+                    : 'bg-[#f5f5f5] text-black active:bg-gray-200 hover:bg-gray-200'
+                }`}
+              >
+                {/* Emoji Icon */}
+                <div className={`w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center transition-all flex-shrink-0 ${
+                  isSelected ? obstacle.bgColorSelected : obstacle.bgColor
+                }`}>
+                  <span className="text-[24px] md:text-[28px]">{obstacle.emoji}</span>
+                </div>
+                
+                <span className={`text-[15px] md:text-[17px] font-medium flex-1 ${
+                  isSelected ? 'text-white' : 'text-black'
+                }`}>
+                  {obstacle.label}
+                </span>
+
+                {/* Indicador de seleção */}
+                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 ${
+                  isSelected 
+                    ? 'border-white bg-white' 
+                    : 'border-gray-300'
+                }`}>
+                  {isSelected && (
+                    <svg className="w-4 h-4 text-[#1a1a1a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Botão fixo no bottom */}
