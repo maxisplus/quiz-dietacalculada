@@ -50,13 +50,13 @@ export default function QuizLayout({
 
   return (
     <div className="fixed inset-0 bg-white flex flex-col overflow-hidden">
-      {/* Header com progress bar */}
+      {/* Header com logo e progress bar */}
       <div className="flex-shrink-0 px-4 md:px-6 pt-3 md:pt-4 pb-2 z-10">
-        <div className="flex items-center gap-4 max-w-md mx-auto">
+        <div className="flex items-center gap-3 max-w-md mx-auto">
           {showBackButton ? (
             <button
               onClick={handleBack}
-              className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-all duration-200 active:scale-95"
+              className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-all duration-200 active:scale-95 flex-shrink-0"
               aria-label="Voltar"
             >
               <svg
@@ -74,9 +74,19 @@ export default function QuizLayout({
               </svg>
             </button>
           ) : (
-            <div className="w-10 md:w-11"></div>
+            <div className="w-10 md:w-11 flex-shrink-0"></div>
           )}
-          <div className="flex-1">
+          
+          {/* Logo */}
+          <div className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0">
+            <img 
+              src="/cropped-principal.png" 
+              alt="Dieta Calculada" 
+              className="w-full h-full object-contain"
+            />
+          </div>
+          
+          <div className="flex-1 min-w-0">
             <ProgressBar current={currentStep + 1} total={totalSteps} />
           </div>
         </div>

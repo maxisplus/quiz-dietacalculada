@@ -19,10 +19,14 @@ export default function Home() {
   return (
     <div className="fixed inset-0 bg-white flex items-center justify-center">
       <div className="text-center px-6">
-        {/* Logo/Icon */}
+        {/* Logo */}
         <div className="mb-6 md:mb-8">
-          <div className="w-16 h-16 md:w-24 md:h-24 bg-[#1a1a1a] rounded-3xl mx-auto flex items-center justify-center">
-            <span className="text-3xl md:text-5xl">🥗</span>
+          <div className="w-32 h-32 md:w-40 md:h-40 mx-auto flex items-center justify-center">
+            <img 
+              src="/cropped-principal.png" 
+              alt="Dieta Calculada" 
+              className="w-full h-full object-contain"
+            />
           </div>
         </div>
         
