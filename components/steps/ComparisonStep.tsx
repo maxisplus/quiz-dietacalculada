@@ -17,7 +17,7 @@ export default function ComparisonStep() {
       {/* Header */}
       <div className="px-6 pt-4">
         <h1 className="text-[32px] md:text-[40px] font-bold text-black mb-3 leading-tight max-w-md mx-auto text-center">
-          Lose duas vezes mais perda de peso com Dieta Calculada versus sozinho
+          Com Dieta Calculada você perde 2x mais peso do que sozinho
         </h1>
       </div>
 
@@ -61,7 +61,7 @@ export default function ComparisonStep() {
 
             {/* Texto explicativo */}
             <p className="text-[15px] md:text-[16px] text-gray-500 text-center leading-relaxed">
-              Dieta Calculada facilita e mantém<br />responsabilize você.
+              Dieta Calculada facilita o processo e<br />mantém você responsável pelos resultados
             </p>
 
           </div>
