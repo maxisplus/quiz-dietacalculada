@@ -4,11 +4,11 @@ import { useRouter } from 'next/navigation';
 import { useQuizStore } from '@/store/quizStore';
 
 const obstacles = [
-  { id: 'consistencia', label: 'Falta de consistência', emoji: '📊', bgColor: 'bg-red-100', bgColorSelected: 'bg-red-500' },
-  { id: 'habitos', label: 'Hábitos alimentares ruins', emoji: '🍔', bgColor: 'bg-orange-100', bgColorSelected: 'bg-orange-500' },
-  { id: 'apoio', label: 'Falta de apoio', emoji: '🤝', bgColor: 'bg-purple-100', bgColorSelected: 'bg-purple-500' },
-  { id: 'agenda', label: 'Agenda lotada', emoji: '⏰', bgColor: 'bg-blue-100', bgColorSelected: 'bg-blue-500' },
-  { id: 'inspiracao', label: 'Falta de inspiração', emoji: '💡', bgColor: 'bg-yellow-100', bgColorSelected: 'bg-yellow-500' },
+  { id: 'consistencia', label: 'Falta de consistência' },
+  { id: 'habitos', label: 'Hábitos alimentares ruins' },
+  { id: 'apoio', label: 'Falta de apoio' },
+  { id: 'agenda', label: 'Agenda lotada' },
+  { id: 'inspiracao', label: 'Falta de inspiração' },
 ];
 
 export default function ObstaclesStep() {
@@ -51,27 +51,20 @@ export default function ObstaclesStep() {
               <button
                 key={obstacle.id}
                 onClick={() => handleToggle(obstacle.id)}
-                className={`w-full py-3 md:py-4 px-4 md:px-5 rounded-[16px] md:rounded-[20px] transition-all duration-200 text-left flex items-center gap-3 md:gap-4 ${
+                className={`w-full py-4 md:py-5 px-6 rounded-[16px] md:rounded-[20px] transition-all duration-200 text-left flex items-center justify-between ${
                   isSelected
-                    ? 'bg-[#1a1a1a] text-white shadow-lg'
+                    ? 'bg-[#1a1a1a] text-white'
                     : 'bg-[#f5f5f5] text-black active:bg-gray-200 hover:bg-gray-200'
                 }`}
               >
-                {/* Emoji Icon */}
-                <div className={`w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center transition-all flex-shrink-0 ${
-                  isSelected ? obstacle.bgColorSelected : obstacle.bgColor
-                }`}>
-                  <span className="text-[24px] md:text-[28px]">{obstacle.emoji}</span>
-                </div>
-                
-                <span className={`text-[15px] md:text-[17px] font-medium flex-1 ${
+                <span className={`text-[18px] md:text-[20px] font-semibold ${
                   isSelected ? 'text-white' : 'text-black'
                 }`}>
                   {obstacle.label}
                 </span>
 
-                {/* Indicador de seleção */}
-                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 ${
+                {/* Checkbox indicator */}
+                <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${
                   isSelected 
                     ? 'border-white bg-white' 
                     : 'border-gray-300'

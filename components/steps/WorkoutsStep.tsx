@@ -4,30 +4,9 @@ import { useRouter } from 'next/navigation';
 import { useQuizStore } from '@/store/quizStore';
 
 const workoutOptions = [
-  { 
-    id: '0-2', 
-    label: '0-2', 
-    description: 'Treinos de vez em quando',
-    emoji: '🚶',
-    bgColor: 'bg-blue-100',
-    bgColorSelected: 'bg-blue-500'
-  },
-  { 
-    id: '3-5', 
-    label: '3-5', 
-    description: 'Alguns treinos por semana',
-    emoji: '🏃',
-    bgColor: 'bg-orange-100',
-    bgColorSelected: 'bg-orange-500'
-  },
-  { 
-    id: '6+', 
-    label: '6+', 
-    description: 'Atleta dedicado',
-    emoji: '💪',
-    bgColor: 'bg-green-100',
-    bgColorSelected: 'bg-green-500'
-  },
+  { id: '0-2', label: '0-2 treinos', description: 'Leve' },
+  { id: '3-5', label: '3-5 treinos', description: 'Moderado' },
+  { id: '6+', label: '6+ treinos', description: 'Intenso' },
 ];
 
 export default function WorkoutsStep() {
@@ -63,42 +42,33 @@ export default function WorkoutsStep() {
               <button
                 key={option.id}
                 onClick={() => handleSelect(option.id)}
-                className={`w-full py-4 md:py-5 px-4 md:px-5 rounded-[16px] md:rounded-[20px] transition-all duration-200 text-left flex items-center gap-4 ${
+                className={`w-full py-5 md:py-6 px-6 rounded-[16px] md:rounded-[20px] transition-all duration-200 text-left flex items-center justify-between ${
                   isSelected
-                    ? 'bg-[#1a1a1a] text-white shadow-lg'
+                    ? 'bg-[#1a1a1a] text-white'
                     : 'bg-[#f5f5f5] text-black active:bg-gray-200 hover:bg-gray-200'
                 }`}
               >
-                {/* Emoji Icon */}
-                <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center transition-all ${
-                  isSelected ? option.bgColorSelected : option.bgColor
-                }`}>
-                  <span className="text-[28px] md:text-[32px]">{option.emoji}</span>
-                </div>
-                
-                <div className="flex-1 min-w-0">
-                  <div className={`text-[18px] md:text-[19px] font-bold ${
+                <div>
+                  <span className={`text-[18px] md:text-[20px] font-semibold block ${
                     isSelected ? 'text-white' : 'text-black'
                   }`}>
                     {option.label}
-                  </div>
-                  <div className={`text-[14px] md:text-[15px] ${
-                    isSelected ? 'text-white/80' : 'text-gray-500'
+                  </span>
+                  <span className={`text-[15px] md:text-[16px] ${
+                    isSelected ? 'text-white/70' : 'text-gray-500'
                   }`}>
                     {option.description}
-                  </div>
+                  </span>
                 </div>
 
-                {/* Indicador de seleção */}
+                {/* Radio indicator */}
                 <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                   isSelected 
                     ? 'border-white bg-white' 
                     : 'border-gray-300'
                 }`}>
                   {isSelected && (
-                    <svg className="w-4 h-4 text-[#1a1a1a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
+                    <div className="w-3 h-3 rounded-full bg-[#1a1a1a]" />
                   )}
                 </div>
               </button>

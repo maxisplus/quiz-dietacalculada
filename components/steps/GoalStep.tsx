@@ -4,27 +4,9 @@ import { useRouter } from 'next/navigation';
 import { useQuizStore } from '@/store/quizStore';
 
 const goals = [
-  { 
-    id: 'perder', 
-    label: 'Perder peso',
-    emoji: '📉',
-    bgColor: 'bg-red-100',
-    bgColorSelected: 'bg-red-500'
-  },
-  { 
-    id: 'manter', 
-    label: 'Manter peso',
-    emoji: '⚖️',
-    bgColor: 'bg-blue-100',
-    bgColorSelected: 'bg-blue-500'
-  },
-  { 
-    id: 'ganhar', 
-    label: 'Ganhar massa',
-    emoji: '💪',
-    bgColor: 'bg-green-100',
-    bgColorSelected: 'bg-green-500'
-  },
+  { id: 'perder', label: 'Perder peso' },
+  { id: 'manter', label: 'Manter peso' },
+  { id: 'ganhar', label: 'Ganhar massa' },
 ];
 
 export default function GoalStep() {
@@ -60,35 +42,26 @@ export default function GoalStep() {
               <button
                 key={goal.id}
                 onClick={() => handleSelect(goal.id)}
-                className={`w-full py-4 md:py-5 px-4 md:px-5 rounded-[16px] md:rounded-[20px] transition-all duration-200 text-left flex items-center gap-4 ${
+                className={`w-full py-5 md:py-6 px-6 rounded-[16px] md:rounded-[20px] transition-all duration-200 text-left flex items-center justify-between ${
                   isSelected
-                    ? 'bg-[#1a1a1a] text-white shadow-lg'
+                    ? 'bg-[#1a1a1a] text-white'
                     : 'bg-[#f5f5f5] text-black active:bg-gray-200 hover:bg-gray-200'
                 }`}
               >
-                {/* Emoji Icon */}
-                <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center transition-all ${
-                  isSelected ? goal.bgColorSelected : goal.bgColor
-                }`}>
-                  <span className="text-[28px] md:text-[32px]">{goal.emoji}</span>
-                </div>
-                
-                <span className={`text-[18px] md:text-[19px] font-semibold flex-1 ${
+                <span className={`text-[18px] md:text-[20px] font-semibold ${
                   isSelected ? 'text-white' : 'text-black'
                 }`}>
                   {goal.label}
                 </span>
 
-                {/* Indicador de seleção */}
+                {/* Radio indicator */}
                 <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                   isSelected 
                     ? 'border-white bg-white' 
                     : 'border-gray-300'
                 }`}>
                   {isSelected && (
-                    <svg className="w-4 h-4 text-[#1a1a1a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
+                    <div className="w-3 h-3 rounded-full bg-[#1a1a1a]" />
                   )}
                 </div>
               </button>
