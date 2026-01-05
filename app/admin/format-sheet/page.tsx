@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 export default function FormatSheet() {
   const [loading, setLoading] = useState(false);
+  const [loadingClear, setLoadingClear] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -31,6 +32,34 @@ export default function FormatSheet() {
     }
   };
 
+  const handleClear = async () => {
+    if (!confirm('Tem certeza que deseja limpar TODOS os dados da planilha? (Apenas o cabeçalho será mantido)')) {
+      return;
+    }
+
+    setLoadingClear(true);
+    setMessage('');
+    setError('');
+
+    try {
+      const response = await fetch('/api/sheets/clear', {
+        method: 'POST',
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setMessage(result.message);
+      } else {
+        setError(result.error || 'Erro desconhecido');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Erro ao conectar com o servidor');
+    } finally {
+      setLoadingClear(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
       <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full">
@@ -41,13 +70,23 @@ export default function FormatSheet() {
           Clique no botão abaixo para formatar automaticamente a planilha do Google Sheets com cabeçalhos, cores e filtros.
         </p>
 
-        <button
-          onClick={handleFormat}
-          disabled={loading}
-          className="w-full py-3 px-4 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
-        >
-          {loading ? 'Formatando...' : 'Formatar Planilha'}
-        </button>
+        <div className="space-y-3">
+          <button
+            onClick={handleFormat}
+            disabled={loading || loadingClear}
+            className="w-full py-3 px-4 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            {loading ? 'Formatando...' : '🎨 Formatar Planilha'}
+          </button>
+
+          <button
+            onClick={handleClear}
+            disabled={loading || loadingClear}
+            className="w-full py-3 px-4 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            {loadingClear ? 'Limpando...' : '🧹 Limpar Dados Antigos'}
+          </button>
+        </div>
 
         {message && (
           <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
