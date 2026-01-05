@@ -1,6 +1,69 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useQuizStore } from '@/store/quizStore';
+
 export default function ThankYouStep() {
+  const { answers } = useQuizStore();
+  const [dataSent, setDataSent] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
+
+  // Enviar dados para Google Sheets quando o componente for montado
+  useEffect(() => {
+    const sendDataToSheets = async () => {
+      // Evitar envio duplicado
+      if (dataSent || isSending) return;
+
+      setIsSending(true);
+      setSendError(null);
+
+      try {
+        console.log('📤 Enviando dados do quiz para Google Sheets...');
+        console.log('Dados:', answers);
+
+        // Preparar dados para envio
+        const dataToSend = {
+          ...answers,
+          // Converter Date para string se existir
+          birthDate: answers.birthDate 
+            ? (answers.birthDate instanceof Date 
+                ? answers.birthDate.toISOString() 
+                : answers.birthDate)
+            : undefined,
+        };
+
+        const response = await fetch('/api/sheets', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataToSend),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          setDataSent(true);
+          setIsSending(false);
+          console.log('✅ Dados enviados com sucesso para Google Sheets!', result);
+        } else {
+          setIsSending(false);
+          const errorMsg = result.error || result.details?.message || 'Erro desconhecido';
+          setSendError(errorMsg);
+          console.error('❌ Erro ao enviar dados:', result);
+        }
+      } catch (error: any) {
+        setIsSending(false);
+        const errorMsg = error.message || 'Erro ao conectar com o servidor';
+        setSendError(errorMsg);
+        console.error('❌ Erro ao enviar dados para Google Sheets:', error);
+      }
+    };
+
+    sendDataToSheets();
+  }, [answers, dataSent, isSending]);
+
   const handleCheckout = () => {
     // Substitua esta URL pela URL do seu checkout
     const checkoutUrl = 'https://pay.kiwify.com.br/seu-produto';
@@ -31,6 +94,37 @@ export default function ThankYouStep() {
             <p className="text-[14px] md:text-[15px] text-gray-600 mb-6 text-center">
               Baseado nas suas respostas, criamos o plano perfeito para você alcançar seus objetivos
             </p>
+
+            {/* Status do envio para Google Sheets */}
+            {isSending && (
+              <div className="bg-blue-50 border border-blue-200 rounded-[14px] p-3 mb-4 text-center">
+                <p className="text-[12px] text-blue-700">
+                  💾 Salvando seus dados...
+                </p>
+              </div>
+            )}
+            
+            {dataSent && (
+              <div className="bg-green-50 border border-green-200 rounded-[14px] p-3 mb-4 text-center">
+                <p className="text-[12px] text-green-700">
+                  ✅ Dados salvos com sucesso!
+                </p>
+              </div>
+            )}
+            
+            {sendError && (
+              <div className="bg-red-50 border border-red-200 rounded-[14px] p-3 mb-4 text-center">
+                <p className="text-[12px] text-red-700 font-semibold mb-1">
+                  ⚠️ Erro ao salvar dados
+                </p>
+                <p className="text-[11px] text-red-600">
+                  {sendError}
+                </p>
+                <p className="text-[10px] text-red-500 mt-1">
+                  Verifique o console do navegador para mais detalhes
+                </p>
+              </div>
+            )}
 
             {/* Card de Oferta */}
             <div className="bg-[#f9f9f9] rounded-[20px] p-5 mb-4">

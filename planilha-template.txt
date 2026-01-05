@@ -1,0 +1,4 @@
+Copie e cole esta linha na primeira linha da sua planilha do Google Sheets:
+
+Data/Hora | Nome | Email | Telefone | Gênero | Data Nascimento | Altura (cm) | Altura (in) | Peso (kg) | Peso Desejado | Objetivo | Velocidade Semanal | Tipo Dieta | Treinos/Semana | Tem Personal | Conquistas | Obstáculos | Onde Ouviu | Já Usou Apps | Código Referência | Adicionar Calorias | Transferir Calorias | Unidade
+
