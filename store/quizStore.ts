@@ -1,20 +1,15 @@
 import { create } from 'zustand';
 
 export interface QuizAnswers {
+  // Dados pessoais
   referralCode?: string;
-  dietType?: 'classico' | 'pescetariano' | 'vegetariano' | 'vegano';
-  birthDate?: Date;
-  gender?: 'masculino' | 'feminino' | 'outro';
-  workoutsPerWeek?: '0-2' | '3-5' | '6+';
-  hasTrainer?: boolean;
-  goal?: 'perder' | 'manter' | 'ganhar';
-  achievements?: string[];
-  obstacles?: string[];
-  heardFrom?: string;
-  triedOtherApps?: boolean;
   name?: string;
   email?: string;
   phone?: string;
+  
+  // Dados físicos
+  birthDate?: Date;
+  gender?: 'masculino' | 'feminino' | 'outro';
   unit?: 'imperial' | 'metric';
   heightFt?: number;
   heightIn?: number;
@@ -22,9 +17,34 @@ export interface QuizAnswers {
   weightLb?: number;
   weightKg?: number;
   desiredWeightKg?: number;
+  
+  // Objetivos e preferências
+  goal?: 'perder' | 'manter' | 'ganhar';
   weightSpeedPerWeek?: number;
+  dietType?: 'classico' | 'pescetariano' | 'vegetariano' | 'vegano';
+  workoutsPerWeek?: '0-2' | '3-5' | '6+';
+  hasTrainer?: boolean;
+  achievements?: string[];
+  obstacles?: string[];
+  
+  // Marketing
+  heardFrom?: string;
+  triedOtherApps?: boolean;
+  
+  // Configurações
   addBurnedCalories?: boolean;
   transferExtraCalories?: boolean;
+  
+  // UTMs e tracking
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_term?: string;
+  utm_content?: string;
+  referrer?: string;
+  landingPage?: string;
+  userAgent?: string;
+  ipAddress?: string;
 }
 
 interface QuizStore {

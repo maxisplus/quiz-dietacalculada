@@ -71,31 +71,63 @@ export async function POST(request: NextRequest) {
       ? new Date(body.birthDate).toLocaleDateString('pt-BR')
       : '';
 
+    // Calcular idade se tiver data de nascimento
+    const age = birthDate && body.birthDate 
+      ? new Date().getFullYear() - new Date(body.birthDate).getFullYear()
+      : '';
+
     // Linha de dados para inserir
     const values = [[
-      timestamp,                                    // Data/Hora
-      body.name || '',                              // Nome
-      body.email || '',                             // Email
-      body.phone || '',                             // Telefone
-      body.gender || '',                            // Gênero
-      birthDate,                                    // Data de Nascimento
-      body.heightCm || body.heightFt || '',         // Altura (cm ou ft)
-      body.heightIn || '',                          // Altura (polegadas, se imperial)
-      body.weightKg || body.weightLb || '',         // Peso (kg ou lb)
-      body.desiredWeightKg || '',                   // Peso Desejado
-      body.goal || '',                              // Objetivo (perder/manter/ganhar)
-      body.weightSpeedPerWeek || '',                // Velocidade de perda/ganho por semana
-      body.dietType || '',                          // Tipo de dieta
-      body.workoutsPerWeek || '',                   // Treinos por semana
-      body.hasTrainer ? 'Sim' : 'Não',             // Tem personal trainer
-      achievements,                                  // Conquistas
-      obstacles,                                     // Obstáculos
-      body.heardFrom || '',                         // Onde ouviu falar
-      body.triedOtherApps ? 'Sim' : 'Não',          // Já usou outros apps
-      body.referralCode || '',                      // Código de referência
-      body.addBurnedCalories ? 'Sim' : 'Não',      // Adicionar calorias queimadas
-      body.transferExtraCalories ? 'Sim' : 'Não',  // Transferir calorias extras
-      body.unit || 'metric',                        // Unidade (métrica/imperial)
+      // Timestamp e identificação
+      timestamp,                                    // A - Data/Hora
+      body.name || '',                              // B - Nome
+      body.email || '',                             // C - Email
+      body.phone || '',                             // D - Telefone
+      
+      // Dados demográficos
+      body.gender || '',                            // E - Gênero
+      birthDate,                                    // F - Data de Nascimento
+      age,                                          // G - Idade
+      
+      // Dados físicos
+      body.heightCm || '',                          // H - Altura (cm)
+      body.weightKg || '',                          // I - Peso (kg)
+      body.desiredWeightKg || '',                   // J - Peso Desejado (kg)
+      
+      // Objetivos
+      body.goal || '',                              // K - Objetivo (perder/manter/ganhar)
+      body.weightSpeedPerWeek || '',                // L - Velocidade Semanal (kg)
+      
+      // Estilo de vida
+      body.dietType || '',                          // M - Tipo de Dieta
+      body.workoutsPerWeek || '',                   // N - Treinos por Semana
+      body.hasTrainer ? 'Sim' : 'Não',             // O - Tem Personal Trainer
+      
+      // Motivação e desafios
+      achievements,                                  // P - Conquistas
+      obstacles,                                     // Q - Obstáculos
+      
+      // Marketing
+      body.heardFrom || '',                         // R - Onde Ouviu Falar
+      body.triedOtherApps ? 'Sim' : 'Não',          // S - Já Usou Outros Apps
+      body.referralCode || '',                      // T - Código de Referência
+      
+      // UTMs
+      body.utm_source || '',                        // U - UTM Source
+      body.utm_medium || '',                        // V - UTM Medium
+      body.utm_campaign || '',                      // W - UTM Campaign
+      body.utm_term || '',                          // X - UTM Term
+      body.utm_content || '',                       // Y - UTM Content
+      
+      // Tracking adicional
+      body.referrer || '',                          // Z - Referrer
+      body.landingPage || '',                       // AA - Landing Page
+      body.userAgent || '',                         // AB - User Agent
+      
+      // Configurações
+      body.unit || 'metric',                        // AC - Unidade (métrica/imperial)
+      body.addBurnedCalories ? 'Sim' : 'Não',      // AD - Adicionar Calorias Queimadas
+      body.transferExtraCalories ? 'Sim' : 'Não',  // AE - Transferir Calorias Extras
     ]];
 
     // Inserir dados na planilha
@@ -105,7 +137,7 @@ export async function POST(request: NextRequest) {
     
     const response = await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: 'A:W', // Usa a primeira aba, independente do nome
+      range: 'A:AE', // Expandido para incluir todos os campos (até coluna AE)
       valueInputOption: 'USER_ENTERED',
       insertDataOption: 'INSERT_ROWS',
       requestBody: {
