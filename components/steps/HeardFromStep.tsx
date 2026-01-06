@@ -66,7 +66,7 @@ export default function HeardFromStep() {
         );
       case 'google':
         return (
-          <div className={`w-10 h-10 rounded-lg ${isSelected ? 'bg-[#1a1a1a]' : 'bg-white border border-gray-200'} flex items-center justify-center`}>
+          <div className={`w-10 h-10 rounded-lg ${isSelected ? 'bg-[#FF911A]' : 'bg-white border border-gray-200'} flex items-center justify-center`}>
             <svg className={isSelected ? '' : ''} width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
               <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -117,7 +117,7 @@ export default function HeardFromStep() {
                 onClick={() => handleSelect(source.id)}
                 className={`w-full py-3 md:py-4 px-4 md:px-6 rounded-[16px] md:rounded-[20px] transition-all duration-200 text-left flex items-center gap-3 md:gap-4 ${
                   isSelected
-                    ? 'bg-[#1a1a1a] text-white'
+                    ? 'bg-[#FF911A] text-white'
                     : 'bg-[#f5f5f5] text-black active:bg-gray-200 hover:bg-gray-200'
                 }`}
               >
@@ -137,7 +137,7 @@ export default function HeardFromStep() {
             disabled={!answers.heardFrom}
             className={`w-full py-4 md:py-5 px-6 rounded-[16px] md:rounded-[20px] font-semibold text-[16px] md:text-[17px] transition-all duration-200 ${
               answers.heardFrom
-                ? 'bg-[#1a1a1a] text-white active:bg-black hover:bg-gray-800'
+                ? 'bg-[#FF911A] text-white active:bg-[#FF911A]/90 hover:bg-[#FF911A]/90'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}
           >

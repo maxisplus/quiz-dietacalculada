@@ -9,6 +9,7 @@ import BirthDateStep from '@/components/steps/BirthDateStep';
 import GenderStep from '@/components/steps/GenderStep';
 import WorkoutsStep from '@/components/steps/WorkoutsStep';
 import TrainerStep from '@/components/steps/TrainerStep';
+import DietHelperStep from '@/components/steps/DietHelperStep';
 import GoalStep from '@/components/steps/GoalStep';
 import ObstaclesStep from '@/components/steps/ObstaclesStep';
 import TriedAppsStep from '@/components/steps/TriedAppsStep';
@@ -21,7 +22,6 @@ import DesiredWeightStep from '@/components/steps/DesiredWeightStep';
 import WeightGoalStep from '@/components/steps/WeightGoalStep';
 import WeightSpeedStep from '@/components/steps/WeightSpeedStep';
 import ComparisonStep from '@/components/steps/ComparisonStep';
-import WeightTransitionStep from '@/components/steps/WeightTransitionStep';
 import TrustStep from '@/components/steps/TrustStep';
 import ReadyStep from '@/components/steps/ReadyStep';
 import LoadingStep from '@/components/steps/LoadingStep';
@@ -37,12 +37,12 @@ const steps = [
   HeightWeightStep,     // Etapa 5 - Altura e peso
   BirthDateStep,        // Etapa 6 - Data de nascimento
   TrainerStep,          // Etapa 7 - Tem personal
-  GoalStep,             // Etapa 8 - Objetivo
-  DesiredWeightStep,    // Etapa 9 - Peso desejado
-  WeightGoalStep,       // Etapa 10 - Meta motivacional
-  WeightSpeedStep,      // Etapa 11 - Velocidade de perda
-  ComparisonStep,       // Etapa 12 - Comparação
-  WeightTransitionStep, // Etapa 13 - Transição de peso (gráfico)
+  DietHelperStep,       // Etapa 8 - Auxílio na dieta
+  GoalStep,             // Etapa 9 - Objetivo
+  DesiredWeightStep,    // Etapa 10 - Peso desejado
+  WeightGoalStep,       // Etapa 11 - Meta motivacional
+  WeightSpeedStep,      // Etapa 12 - Velocidade de perda
+  ComparisonStep,       // Etapa 13 - Comparação
   ObstaclesStep,        // Etapa 14 - Obstáculos
   DietTypeStep,         // Etapa 15 - Tipo de dieta
   AchievementsStep,     // Etapa 16 - Conquistas

@@ -77,46 +77,8 @@ export default function TrustStep() {
               transitionDelay: '300ms'
             }}
           >
-            Agora vamos personalizar o Dieta Calculada para você...
+            Clique no botão abaixo para receber seu plano personalizado do Dieta Calculada…
           </p>
-
-          {/* Card de privacidade */}
-          <div 
-            className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-5 border border-gray-100 transition-all duration-500"
-            style={{
-              opacity: isAnimated ? 1 : 0,
-              transform: isAnimated ? 'translateY(0)' : 'translateY(10px)',
-              transitionDelay: '400ms'
-            }}
-          >
-            {/* Ícone de escudo/cadeado */}
-            <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-green-400 to-green-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-200">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path 
-                  d="M12 2L4 6V12C4 16.42 7.45 20.35 12 22C16.55 20.35 20 16.42 20 12V6L12 2Z" 
-                  stroke="white" 
-                  strokeWidth="2" 
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path 
-                  d="M9 12L11 14L15 10" 
-                  stroke="white" 
-                  strokeWidth="2" 
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            
-            <h3 className="text-[15px] md:text-[16px] font-semibold text-black mb-2">
-              Sua privacidade e segurança importam para nós
-            </h3>
-            <p className="text-[13px] md:text-[14px] text-gray-500 leading-relaxed">
-              Prometemos sempre manter suas informações pessoais privadas e seguras.
-            </p>
-          </div>
 
         </div>
       </div>
@@ -126,7 +88,7 @@ export default function TrustStep() {
         <div className="max-w-md mx-auto w-full">
           <button
             onClick={handleContinue}
-            className="w-full py-4 md:py-5 px-6 rounded-2xl font-semibold text-[16px] md:text-[17px] transition-all duration-200 bg-[#1a1a1a] text-white active:scale-[0.98] hover:bg-gray-800"
+            className="w-full py-4 md:py-5 px-6 rounded-2xl font-semibold text-[16px] md:text-[17px] transition-all duration-200 bg-[#FF911A] text-white active:scale-[0.98] hover:bg-[#FF911A]/90"
           >
             Continuar
           </button>

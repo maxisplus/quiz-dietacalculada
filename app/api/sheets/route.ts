@@ -66,6 +66,34 @@ export async function POST(request: NextRequest) {
       ? body.obstacles.join(', ') 
       : body.obstacles || '';
 
+    // Mapear opção de treinador para texto legível
+    const trainerOptionMap: Record<string, string> = {
+      'nao-treino': 'Não treino',
+      'ajuda-academia': 'Peço ajuda do profissional da academia',
+      'montar-proprios': 'Gosto de montar meus próprios treinos',
+      'copiar-treino': 'Copio o treino de alguém',
+      'plano-online': 'Assino um plano online',
+      'personal-online': 'Tenho personal online',
+      'personal-presencial': 'Tenho personal presencial',
+    };
+    const trainerOption = body.hasTrainer 
+      ? (trainerOptionMap[body.hasTrainer] || body.hasTrainer)
+      : '';
+
+    // Mapear opção de auxílio na dieta para texto legível
+    const dietHelperOptionMap: Record<string, string> = {
+      'nao-faco-dieta': 'Não faço dieta',
+      'seguir-intuicao': 'Sigo a intuição',
+      'montar-propria': 'Gosto de montar minha própria dieta',
+      'copiar-dieta': 'Copio a dieta de alguém',
+      'plano-online': 'Assino um plano online',
+      'nutricionista-online': 'Tenho nutricionista online',
+      'nutricionista-presencial': 'Tenho nutricionista presencial',
+    };
+    const dietHelperOption = body.dietHelper 
+      ? (dietHelperOptionMap[body.dietHelper] || body.dietHelper)
+      : '';
+
     // Formatar data de nascimento
     const birthDate = body.birthDate 
       ? new Date(body.birthDate).toLocaleDateString('pt-BR')
@@ -101,33 +129,34 @@ export async function POST(request: NextRequest) {
       // Estilo de vida
       body.dietType || '',                          // M - Tipo de Dieta
       body.workoutsPerWeek || '',                   // N - Treinos por Semana
-      body.hasTrainer ? 'Sim' : 'Não',             // O - Tem Personal Trainer
+      trainerOption,                                 // O - Tem Personal Trainer
+      dietHelperOption,                              // P - Auxílio na Dieta
       
       // Motivação e desafios
-      achievements,                                  // P - Conquistas
-      obstacles,                                     // Q - Obstáculos
+      achievements,                                  // Q - Conquistas
+      obstacles,                                     // R - Obstáculos
       
       // Marketing
-      body.heardFrom || '',                         // R - Onde Ouviu Falar
-      body.triedOtherApps ? 'Sim' : 'Não',          // S - Já Usou Outros Apps
-      body.referralCode || '',                      // T - Código de Referência
+      body.heardFrom || '',                         // S - Onde Ouviu Falar
+      body.triedOtherApps ? 'Sim' : 'Não',          // T - Já Usou Outros Apps
+      body.referralCode || '',                      // U - Código de Referência
       
       // UTMs
-      body.utm_source || '',                        // U - UTM Source
-      body.utm_medium || '',                        // V - UTM Medium
-      body.utm_campaign || '',                      // W - UTM Campaign
-      body.utm_term || '',                          // X - UTM Term
-      body.utm_content || '',                       // Y - UTM Content
+      body.utm_source || '',                        // V - UTM Source
+      body.utm_medium || '',                        // W - UTM Medium
+      body.utm_campaign || '',                      // X - UTM Campaign
+      body.utm_term || '',                          // Y - UTM Term
+      body.utm_content || '',                       // Z - UTM Content
       
       // Tracking adicional
-      body.referrer || '',                          // Z - Referrer
-      body.landingPage || '',                       // AA - Landing Page
-      body.userAgent || '',                         // AB - User Agent
+      body.referrer || '',                          // AA - Referrer
+      body.landingPage || '',                       // AB - Landing Page
+      body.userAgent || '',                         // AC - User Agent
       
       // Configurações
-      body.unit || 'metric',                        // AC - Unidade (métrica/imperial)
-      body.addBurnedCalories ? 'Sim' : 'Não',      // AD - Adicionar Calorias Queimadas
-      body.transferExtraCalories ? 'Sim' : 'Não',  // AE - Transferir Calorias Extras
+      body.unit || 'metric',                        // AD - Unidade (métrica/imperial)
+      body.addBurnedCalories ? 'Sim' : 'Não',      // AE - Adicionar Calorias Queimadas
+      body.transferExtraCalories ? 'Sim' : 'Não',  // AF - Transferir Calorias Extras
     ]];
 
     // Inserir dados na planilha
@@ -137,7 +166,7 @@ export async function POST(request: NextRequest) {
     
     const response = await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: 'A:AE', // Expandido para incluir todos os campos (até coluna AE)
+      range: 'A:AF', // Expandido para incluir todos os campos (até coluna AF)
       valueInputOption: 'USER_ENTERED',
       insertDataOption: 'INSERT_ROWS',
       requestBody: {

@@ -52,7 +52,7 @@ export default function AchievementsStep() {
                 onClick={() => handleToggle(achievement.id)}
                 className={`w-full py-4 md:py-5 px-6 rounded-[16px] md:rounded-[20px] transition-all duration-200 text-left flex items-center justify-between ${
                   isSelected
-                    ? 'bg-[#1a1a1a] text-white'
+                    ? 'bg-[#FF911A] text-white'
                     : 'bg-[#f5f5f5] text-black active:bg-gray-200 hover:bg-gray-200'
                 }`}
               >
@@ -88,7 +88,7 @@ export default function AchievementsStep() {
             disabled={!answers.achievements || answers.achievements.length === 0}
             className={`w-full py-4 md:py-5 px-6 rounded-[16px] md:rounded-[20px] font-semibold text-[16px] md:text-[17px] transition-all duration-200 ${
               answers.achievements && answers.achievements.length > 0
-                ? 'bg-[#1a1a1a] text-white active:bg-black hover:bg-gray-800'
+                ? 'bg-[#FF911A] text-white active:bg-[#FF911A]/90 hover:bg-[#FF911A]/90'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}
           >

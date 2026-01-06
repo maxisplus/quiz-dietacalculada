@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useQuizStore } from '@/store/quizStore';
 
 export default function ThankYouStep() {
@@ -8,13 +8,15 @@ export default function ThankYouStep() {
   const [dataSent, setDataSent] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
+  const hasSentRef = useRef(false);
 
-  // Enviar dados para Google Sheets quando o componente for montado
+  // Enviar dados para Google Sheets quando o componente for montado (apenas uma vez)
   useEffect(() => {
     const sendDataToSheets = async () => {
-      // Evitar envio duplicado
-      if (dataSent || isSending) return;
+      // Evitar envio duplicado usando ref
+      if (hasSentRef.current || isSending) return;
 
+      hasSentRef.current = true;
       setIsSending(true);
       setSendError(null);
 
@@ -49,12 +51,14 @@ export default function ThankYouStep() {
           console.log('✅ Dados enviados com sucesso para Google Sheets!', result);
         } else {
           setIsSending(false);
+          hasSentRef.current = false; // Permitir nova tentativa em caso de erro
           const errorMsg = result.error || result.details?.message || 'Erro desconhecido';
           setSendError(errorMsg);
           console.error('❌ Erro ao enviar dados:', result);
         }
       } catch (error: any) {
         setIsSending(false);
+        hasSentRef.current = false; // Permitir nova tentativa em caso de erro
         const errorMsg = error.message || 'Erro ao conectar com o servidor';
         setSendError(errorMsg);
         console.error('❌ Erro ao enviar dados para Google Sheets:', error);
@@ -62,7 +66,8 @@ export default function ThankYouStep() {
     };
 
     sendDataToSheets();
-  }, [answers, dataSent, isSending]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Executar apenas uma vez quando o componente montar
 
   const handleCheckout = () => {
     // Substitua esta URL pela URL do seu checkout
@@ -220,7 +225,7 @@ export default function ThankYouStep() {
         <div className="max-w-md mx-auto w-full">
           <button
             onClick={handleCheckout}
-            className="w-full py-4 md:py-5 px-6 rounded-[14px] font-bold text-[15px] md:text-[16px] transition-all duration-200 bg-green-600 text-white active:bg-green-700 hover:bg-green-700 shadow-md uppercase"
+            className="w-full py-4 md:py-5 px-6 rounded-[14px] font-bold text-[15px] md:text-[16px] transition-all duration-200 bg-[#FF911A] text-white active:bg-[#FF911A]/90 hover:bg-[#FF911A]/90 shadow-md uppercase"
           >
             GARANTIR MINHA VAGA COM 50% OFF
           </button>

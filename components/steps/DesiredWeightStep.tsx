@@ -258,13 +258,13 @@ export default function DesiredWeightStep() {
               >
                 {/* Linha vertical */}
                 <div 
-                  className={`w-1 rounded-t transition-colors duration-200 ${isValidWeight() ? 'bg-[#1a1a1a]' : 'bg-red-500'}`}
+                  className={`w-1 rounded-t transition-colors duration-200 ${isValidWeight() ? 'bg-[#FF911A]' : 'bg-red-500'}`}
                   style={{ height: '32px' }}
                 />
                 {/* Thumb (bolinha) */}
                 <div 
                   className={`w-7 h-7 rounded-full shadow-lg -mt-1 transition-all duration-200 ${
-                    isValidWeight() ? 'bg-[#1a1a1a]' : 'bg-red-500'
+                    isValidWeight() ? 'bg-[#FF911A]' : 'bg-red-500'
                   } ${isDragging.current ? 'scale-110' : 'scale-100'}`}
                 />
               </div>
@@ -299,7 +299,7 @@ export default function DesiredWeightStep() {
             disabled={!isValidWeight()}
             className={`w-full py-4 md:py-5 px-6 rounded-[16px] md:rounded-[20px] font-semibold text-[16px] md:text-[17px] transition-all duration-200 ${
               isValidWeight() 
-                ? 'bg-[#1a1a1a] text-white active:scale-[0.98] hover:bg-gray-800' 
+                ? 'bg-[#FF911A] text-white active:scale-[0.98] hover:bg-[#FF911A]/90' 
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
           >

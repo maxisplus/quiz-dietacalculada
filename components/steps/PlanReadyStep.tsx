@@ -303,7 +303,7 @@ export default function PlanReadyStep() {
         <div className="max-w-md mx-auto w-full">
           <button
             onClick={handleContinue}
-            className="w-full py-4 md:py-5 px-6 rounded-2xl font-semibold text-[16px] md:text-[17px] transition-all duration-200 bg-gradient-to-r from-green-500 to-green-600 text-white active:scale-[0.98] hover:shadow-lg hover:shadow-green-200"
+            className="w-full py-4 md:py-5 px-6 rounded-2xl font-semibold text-[16px] md:text-[17px] transition-all duration-200 bg-[#FF911A] text-white active:scale-[0.98] hover:bg-[#FF911A]/90"
           >
             Vamos começar! 🚀
           </button>

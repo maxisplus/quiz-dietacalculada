@@ -3,35 +3,31 @@
 import { useRouter } from 'next/navigation';
 import { useQuizStore } from '@/store/quizStore';
 
-type TrainerOption = 'nao-treino' | 'ajuda-academia' | 'montar-proprios' | 'copiar-treino' | 'plano-online' | 'personal-online' | 'personal-presencial';
+type DietHelperOption = 'nao-faco-dieta' | 'seguir-intuicao' | 'montar-propria' | 'copiar-dieta' | 'plano-online' | 'nutricionista-online' | 'nutricionista-presencial';
 
-const trainerOptions: { value: TrainerOption; label: string }[] = [
-  { value: 'nao-treino', label: 'Não treino' },
-  { value: 'ajuda-academia', label: 'Peço ajuda do profissional da academia' },
-  { value: 'montar-proprios', label: 'Gosto de montar meus próprios treinos' },
-  { value: 'copiar-treino', label: 'Copio o treino de alguém' },
+const dietHelperOptions: { value: DietHelperOption; label: string }[] = [
+  { value: 'nao-faco-dieta', label: 'Não faço dieta' },
+  { value: 'seguir-intuicao', label: 'Sigo a intuição' },
+  { value: 'montar-propria', label: 'Gosto de montar minha própria dieta' },
+  { value: 'copiar-dieta', label: 'Copio a dieta de alguém' },
   { value: 'plano-online', label: 'Assino um plano online' },
-  { value: 'personal-online', label: 'Tenho personal online' },
-  { value: 'personal-presencial', label: 'Tenho personal presencial' },
+  { value: 'nutricionista-online', label: 'Tenho nutricionista online' },
+  { value: 'nutricionista-presencial', label: 'Tenho nutricionista presencial' },
 ];
 
-export default function TrainerStep() {
+export default function DietHelperStep() {
   const router = useRouter();
   const { updateAnswer, nextStep, currentStep, answers } = useQuizStore();
 
-  const handleSelect = (option: TrainerOption) => {
-    updateAnswer('hasTrainer', option);
+  const handleSelect = (option: DietHelperOption) => {
+    updateAnswer('dietHelper', option);
   };
 
   const handleContinue = () => {
-    if (answers.hasTrainer) {
+    if (answers.dietHelper) {
       nextStep();
       router.push(`/quiz/${currentStep + 1}`);
     }
-  };
-
-  const getOptionLabel = (value: TrainerOption): string => {
-    return trainerOptions.find(opt => opt.value === value)?.label || '';
   };
 
   return (
@@ -39,36 +35,36 @@ export default function TrainerStep() {
       {/* Header */}
       <div className="px-6 pt-4">
         <h1 className="text-[32px] md:text-[40px] font-bold text-black mb-3 leading-tight max-w-md mx-auto text-center">
-          Você tem alguém auxiliando nos seus treinos hoje?
+          Você tem alguém auxiliando na sua dieta hoje?
         </h1>
       </div>
 
       {/* Conteúdo */}
       <div className="flex-1 flex flex-col justify-center px-6 overflow-y-auto">
         <div className="space-y-3 max-w-md mx-auto w-full py-4">
-          {trainerOptions.map((option) => (
+          {dietHelperOptions.map((option) => (
             <button
               key={option.value}
               onClick={() => handleSelect(option.value)}
               className={`w-full py-5 md:py-6 px-6 rounded-[16px] md:rounded-[20px] transition-all duration-200 flex items-center justify-between ${
-                answers.hasTrainer === option.value
+                answers.dietHelper === option.value
                   ? 'bg-[#FF911A] text-white'
                   : 'bg-[#f5f5f5] text-black active:bg-gray-200 hover:bg-gray-200'
               }`}
             >
               <span className={`text-[18px] md:text-[20px] font-semibold text-left ${
-                answers.hasTrainer === option.value ? 'text-white' : 'text-black'
+                answers.dietHelper === option.value ? 'text-white' : 'text-black'
               }`}>
                 {option.label}
               </span>
 
               {/* Radio indicator */}
               <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 ml-3 ${
-                answers.hasTrainer === option.value 
+                answers.dietHelper === option.value 
                   ? 'border-green-500 bg-green-500' 
                   : 'border-gray-300'
               }`}>
-                {answers.hasTrainer === option.value && (
+                {answers.dietHelper === option.value && (
                   <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                   </svg>
@@ -84,9 +80,9 @@ export default function TrainerStep() {
         <div className="max-w-md mx-auto w-full">
           <button
             onClick={handleContinue}
-            disabled={!answers.hasTrainer}
+            disabled={!answers.dietHelper}
             className={`w-full py-4 md:py-5 px-6 rounded-[16px] md:rounded-[20px] font-semibold text-[16px] md:text-[17px] transition-all duration-200 ${
-              answers.hasTrainer
+              answers.dietHelper
                 ? 'bg-[#FF911A] text-white active:bg-[#FF911A]/90 hover:bg-[#FF911A]/90'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}
@@ -98,3 +94,4 @@ export default function TrainerStep() {
     </div>
   );
 }
+

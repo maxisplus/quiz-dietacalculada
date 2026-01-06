@@ -57,7 +57,7 @@ export default function ReferralCodeStep() {
           {code && (
             <button
               onClick={handleSubmit}
-              className="w-full mb-3 px-6 py-4 md:py-5 bg-green-600 text-white rounded-[16px] md:rounded-[20px] font-semibold active:bg-green-700 hover:bg-green-700 transition-all text-[16px] md:text-[17px]"
+              className="w-full mb-3 px-6 py-4 md:py-5 bg-[#FF911A] text-white rounded-[16px] md:rounded-[20px] font-semibold active:bg-[#FF911A]/90 hover:bg-[#FF911A]/90 transition-all text-[16px] md:text-[17px]"
             >
               ✓ Aplicar Código
             </button>

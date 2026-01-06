@@ -23,7 +23,8 @@ export interface QuizAnswers {
   weightSpeedPerWeek?: number;
   dietType?: 'classico' | 'pescetariano' | 'vegetariano' | 'vegano';
   workoutsPerWeek?: '0-2' | '3-5' | '6+';
-  hasTrainer?: boolean;
+  hasTrainer?: 'nao-treino' | 'ajuda-academia' | 'montar-proprios' | 'copiar-treino' | 'plano-online' | 'personal-online' | 'personal-presencial';
+  dietHelper?: 'nao-faco-dieta' | 'seguir-intuicao' | 'montar-propria' | 'copiar-dieta' | 'plano-online' | 'nutricionista-online' | 'nutricionista-presencial';
   achievements?: string[];
   obstacles?: string[];
   

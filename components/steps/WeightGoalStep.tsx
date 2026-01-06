@@ -30,15 +30,8 @@ export default function WeightGoalStep() {
   }
 
   const getGoalVerb = () => {
-    if (goal === 'ganhar') return 'Ganhando';
-    return 'Perdendo';
-  };
-
-  const getMotivationalText = () => {
-    if (goal === 'ganhar') {
-      return '90% dos usuários conseguem ganhar massa de forma saudável com o Dieta Calculada';
-    }
-    return '90% dos usuários dizem que a mudança é evidente após usar o Dieta Calculada e que é difícil voltar ao antigo';
+    if (goal === 'ganhar') return 'Ganhar';
+    return 'Perder';
   };
 
   const handleContinue = () => {
@@ -53,15 +46,20 @@ export default function WeightGoalStep() {
         <div className="max-w-md mx-auto w-full text-center">
           
           {/* Título principal */}
-          <h1 className="text-[32px] md:text-[40px] font-bold text-black mb-6 leading-tight">
+          <h1 className="text-[32px] md:text-[40px] font-bold text-black mb-4 leading-tight">
             {getGoalVerb()}{' '}
             <span className="text-[#e5a96c]">{weightDifference.toFixed(1)} kg</span>
-            {' '}é uma meta realista. Não é nada difícil!
+            {' '}é uma meta alcançável!
           </h1>
+          
+          {/* Subtítulo */}
+          <p className="text-[18px] md:text-[20px] text-gray-700 mb-6 leading-relaxed font-medium">
+            Basta ter um plano para seguir.
+          </p>
           
           {/* Texto motivacional */}
           <p className="text-[16px] md:text-[18px] text-gray-600 leading-relaxed max-w-sm mx-auto">
-            {getMotivationalText()}
+            90% dos usuários dizem que nunca mais voltaram ao peso antigo depois de usar o Dieta Calculada
           </p>
 
         </div>
@@ -72,7 +70,7 @@ export default function WeightGoalStep() {
         <div className="max-w-md mx-auto w-full">
           <button
             onClick={handleContinue}
-            className="w-full py-4 md:py-5 px-6 rounded-[16px] md:rounded-[20px] font-semibold text-[16px] md:text-[17px] transition-all duration-200 bg-[#1a1a1a] text-white active:bg-black hover:bg-gray-800"
+            className="w-full py-4 md:py-5 px-6 rounded-[16px] md:rounded-[20px] font-semibold text-[16px] md:text-[17px] transition-all duration-200 bg-[#FF911A] text-white active:bg-[#FF911A]/90 hover:bg-[#FF911A]/90"
           >
             Continuar
           </button>
