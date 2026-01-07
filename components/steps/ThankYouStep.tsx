@@ -2,13 +2,18 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useQuizStore } from '@/store/quizStore';
+import { useSearchParams } from 'next/navigation';
+
+type PlanType = 'annual' | 'monthly';
 
 export default function ThankYouStep() {
   const { answers } = useQuizStore();
   const [dataSent, setDataSent] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<PlanType>('annual');
   const hasSentRef = useRef(false);
+  const searchParams = useSearchParams();
 
   // Enviar dados para Google Sheets quando o componente for montado (apenas uma vez)
   useEffect(() => {
@@ -69,10 +74,41 @@ export default function ThankYouStep() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Executar apenas uma vez quando o componente montar
 
-  const handleCheckout = () => {
-    // Substitua esta URL pela URL do seu checkout
-    const checkoutUrl = 'https://pay.kiwify.com.br/seu-produto';
-    window.location.href = checkoutUrl;
+  // Função para construir URL com UTMs
+  const buildCheckoutUrl = (baseUrl: string): string => {
+    const utmParams = new URLSearchParams();
+    
+    // Capturar todos os parâmetros UTM da URL atual
+    const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+    
+    utmKeys.forEach(key => {
+      const value = searchParams.get(key);
+      if (value) {
+        utmParams.append(key, value);
+      }
+    });
+
+    // Se houver UTMs, adicionar à URL base
+    const utmString = utmParams.toString();
+    if (utmString) {
+      const separator = baseUrl.includes('?') ? '&' : '?';
+      return `${baseUrl}${separator}${utmString}`;
+    }
+
+    return baseUrl;
+  };
+
+  const handleCheckout = (plan: PlanType) => {
+    const checkoutUrls = {
+      annual: 'https://pay.hub.la/9uz9SIpLP3pZ0f12ydsD',
+      monthly: 'https://pay.hub.la/QnE0thkRCtKbXLmS5yPy'
+    };
+
+    const baseUrl = checkoutUrls[plan];
+    const finalUrl = buildCheckoutUrl(baseUrl);
+    
+    console.log('🔗 Redirecionando para checkout:', plan, finalUrl);
+    window.location.href = finalUrl;
   };
 
   return (
@@ -83,12 +119,12 @@ export default function ThankYouStep() {
           <div className="max-w-md mx-auto w-full">
             {/* Título Principal */}
             <h1 className="text-[28px] md:text-[32px] font-bold text-black mb-3 leading-tight text-center">
-              Seu Plano Personalizado está pronto!
+              Escolha seu plano e comece agora!
             </h1>
             
             {/* Subtítulo */}
             <p className="text-[14px] md:text-[15px] text-gray-600 mb-6 text-center">
-              Baseado nas suas respostas, criamos o plano perfeito para você alcançar seus objetivos
+              Seu plano personalizado está pronto. Escolha a melhor opção para você:
             </p>
 
             {/* Status do envio para Google Sheets */}
@@ -122,90 +158,154 @@ export default function ThankYouStep() {
               </div>
             )}
 
-            {/* Card de Oferta */}
-            <div className="bg-[#f9f9f9] rounded-[20px] p-5 mb-4">
-              {/* Preço */}
-              <div className="text-center mb-5">
-                <p className="text-gray-500 text-[13px] mb-1">
-                  De <span className="line-through">R$ 197,00</span>
-                </p>
-                <div className="flex items-baseline justify-center gap-1 mb-1">
-                  <span className="text-[42px] md:text-[48px] font-bold text-black leading-none">R$ 97</span>
-                  <div className="text-left">
-                    <p className="text-[13px] text-gray-600 leading-tight">apenas</p>
-                    <p className="text-[11px] text-green-600 font-semibold leading-tight">50% OFF</p>
+            {/* Opções de Planos */}
+            <div className="space-y-4 mb-6">
+              {/* Plano Anual - RECOMENDADO */}
+              <div 
+                onClick={() => setSelectedPlan('annual')}
+                className={`relative bg-[#f9f9f9] rounded-[20px] p-5 cursor-pointer transition-all duration-200 border-2 ${
+                  selectedPlan === 'annual' 
+                    ? 'border-[#FF911A] shadow-lg' 
+                    : 'border-transparent hover:border-gray-300'
+                }`}
+              >
+                {/* Badge Recomendado */}
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-[#FF911A] text-white text-[11px] font-bold px-4 py-1 rounded-full shadow-md uppercase">
+                    ⭐ Mais Popular
+                  </span>
+                </div>
+
+                {/* Radio Button */}
+                <div className="absolute top-5 right-5">
+                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                    selectedPlan === 'annual' 
+                      ? 'border-[#FF911A] bg-[#FF911A]' 
+                      : 'border-gray-300'
+                  }`}>
+                    {selectedPlan === 'annual' && (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                        <path d="M5 12l5 5L19 7"/>
+                      </svg>
+                    )}
                   </div>
                 </div>
-                <p className="text-[12px] text-gray-500">ou 12x de R$ 9,70 sem juros</p>
+
+                <div className="mt-3">
+                  <h3 className="text-[20px] font-bold text-black mb-2">Plano Anual</h3>
+                  
+                  <div className="mb-3">
+                    <p className="text-[32px] font-bold text-black leading-none">
+                      12x de R$ 10,90
+                    </p>
+                    <p className="text-[13px] text-green-600 font-semibold mt-1">
+                      💰 Economize 70% com o plano anual
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                          <path d="M5 12l5 5L19 7"/>
+                        </svg>
+                      </div>
+                      <p className="text-[13px] text-gray-700">Acesso completo por 12 meses</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                          <path d="M5 12l5 5L19 7"/>
+                        </svg>
+                      </div>
+                      <p className="text-[13px] text-gray-700">Suporte prioritário</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                          <path d="M5 12l5 5L19 7"/>
+                        </svg>
+                      </div>
+                      <p className="text-[13px] text-gray-700">Todas as atualizações incluídas</p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              {/* Benefícios */}
-              <div className="space-y-2.5 mb-5">
-                <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
-                      <path d="M5 12l5 5L19 7"/>
-                    </svg>
+              {/* Plano Mensal */}
+              <div 
+                onClick={() => setSelectedPlan('monthly')}
+                className={`relative bg-[#f9f9f9] rounded-[20px] p-5 cursor-pointer transition-all duration-200 border-2 ${
+                  selectedPlan === 'monthly' 
+                    ? 'border-[#FF911A] shadow-lg' 
+                    : 'border-transparent hover:border-gray-300'
+                }`}
+              >
+                {/* Radio Button */}
+                <div className="absolute top-5 right-5">
+                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                    selectedPlan === 'monthly' 
+                      ? 'border-[#FF911A] bg-[#FF911A]' 
+                      : 'border-gray-300'
+                  }`}>
+                    {selectedPlan === 'monthly' && (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                        <path d="M5 12l5 5L19 7"/>
+                      </svg>
+                    )}
                   </div>
-                  <p className="text-[13px] md:text-[14px] text-gray-800 leading-snug">
-                    <strong className="font-semibold">Plano alimentar personalizado</strong> baseado nas suas respostas
-                  </p>
                 </div>
-                
-                <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
-                      <path d="M5 12l5 5L19 7"/>
-                    </svg>
-                  </div>
-                  <p className="text-[13px] md:text-[14px] text-gray-800 leading-snug">
-                    <strong className="font-semibold">Contador de calorias e macros</strong> automático
-                  </p>
-                </div>
-                
-                <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
-                      <path d="M5 12l5 5L19 7"/>
-                    </svg>
-                  </div>
-                  <p className="text-[13px] md:text-[14px] text-gray-800 leading-snug">
-                    <strong className="font-semibold">Receitas exclusivas</strong> adaptadas ao seu objetivo
-                  </p>
-                </div>
-                
-                <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
-                      <path d="M5 12l5 5L19 7"/>
-                    </svg>
-                  </div>
-                  <p className="text-[13px] md:text-[14px] text-gray-800 leading-snug">
-                    <strong className="font-semibold">Suporte nutricional</strong> via WhatsApp
-                  </p>
-                </div>
-                
-                <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
-                      <path d="M5 12l5 5L19 7"/>
-                    </svg>
-                  </div>
-                  <p className="text-[13px] md:text-[14px] text-gray-800 leading-snug">
-                    <strong className="font-semibold">Acesso vitalício</strong> a todas as atualizações
-                  </p>
-                </div>
-              </div>
 
-              {/* Garantia */}
-              <div className="bg-green-50 rounded-[14px] p-3.5 text-center">
-                <p className="text-[13px] md:text-[14px] text-green-800 font-semibold mb-0.5">
-                  🔒 Garantia de 7 dias
-                </p>
-                <p className="text-[12px] text-green-700 leading-snug">
-                  Se não gostar, devolvemos 100% do seu dinheiro
-                </p>
+                <div>
+                  <h3 className="text-[20px] font-bold text-black mb-2">Plano Mensal</h3>
+                  
+                  <div className="mb-3">
+                    <p className="text-[32px] font-bold text-black leading-none">
+                      R$ 27,90<span className="text-[16px] text-gray-600 font-normal">/mês</span>
+                    </p>
+                    <p className="text-[13px] text-gray-600 mt-1">
+                      Pagamento mensal recorrente
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                          <path d="M5 12l5 5L19 7"/>
+                        </svg>
+                      </div>
+                      <p className="text-[13px] text-gray-700">Acesso completo à plataforma</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                          <path d="M5 12l5 5L19 7"/>
+                        </svg>
+                      </div>
+                      <p className="text-[13px] text-gray-700">Cancele quando quiser</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                          <path d="M5 12l5 5L19 7"/>
+                        </svg>
+                      </div>
+                      <p className="text-[13px] text-gray-700">Suporte por WhatsApp</p>
+                    </div>
+                  </div>
+                </div>
               </div>
+            </div>
+
+            {/* Garantia */}
+            <div className="bg-green-50 rounded-[14px] p-3.5 text-center mb-4">
+              <p className="text-[13px] md:text-[14px] text-green-800 font-semibold mb-0.5">
+                🔒 Garantia de 7 dias
+              </p>
+              <p className="text-[12px] text-green-700 leading-snug">
+                Se não gostar, devolvemos 100% do seu dinheiro
+              </p>
             </div>
           </div>
         </div>
@@ -215,10 +315,10 @@ export default function ThankYouStep() {
       <div className="flex-shrink-0 px-6 pb-6 md:pb-8 bg-white">
         <div className="max-w-md mx-auto w-full">
           <button
-            onClick={handleCheckout}
+            onClick={() => handleCheckout(selectedPlan)}
             className="w-full py-4 md:py-5 px-6 rounded-[14px] font-bold text-[15px] md:text-[16px] transition-all duration-200 bg-[#FF911A] text-white active:bg-[#FF911A]/90 hover:bg-[#FF911A]/90 shadow-md uppercase"
           >
-            GARANTIR MINHA VAGA COM 50% OFF
+            {selectedPlan === 'annual' ? 'GARANTIR PLANO ANUAL' : 'GARANTIR PLANO MENSAL'}
           </button>
           
           <p className="text-center text-[11px] md:text-[12px] text-gray-500 mt-2.5">
