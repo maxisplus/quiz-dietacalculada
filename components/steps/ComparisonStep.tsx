@@ -99,6 +99,16 @@ export default function ComparisonStep() {
 
             </div>
 
+            {/* Texto explicativo com ícone */}
+            <div className="bg-white/60 rounded-[16px] md:rounded-[20px] p-3.5 md:p-5 backdrop-blur-sm border border-green-100">
+              <div className="flex items-start gap-2 md:gap-3 justify-center">
+                <span className="text-[16px] md:text-[20px] flex-shrink-0 mt-0.5">✅</span>
+                <p className="text-[13px] md:text-[16px] text-gray-700 text-center leading-relaxed font-medium">
+                  Plano personalizado + acompanhamento profissional =<br /><span className="text-black font-bold">2.5x mais chances de alcançar seu objetivo</span>
+                </p>
+              </div>
+            </div>
+
           </div>
 
         </div>
