@@ -143,51 +143,51 @@ export default function DesiredWeightStep() {
   return (
     <div className="h-full flex flex-col bg-white">
       {/* Header */}
-      <div className="px-6 pt-4">
-        <h1 className="text-[32px] md:text-[40px] font-bold text-black mb-3 leading-tight max-w-md mx-auto text-center">
+      <div className="flex-shrink-0 px-5 md:px-6 pt-3 md:pt-4">
+        <h1 className="text-[24px] md:text-[40px] font-bold text-black mb-2 md:mb-3 leading-tight max-w-md mx-auto text-center">
           {getTitle()}
         </h1>
       </div>
 
-      {/* Conteúdo */}
-      <div className="flex-1 flex flex-col justify-center px-6">
+      {/* Conteúdo com scroll */}
+      <div className="flex-1 overflow-y-auto px-5 md:px-6 py-4 md:py-6">
         <div className="max-w-md mx-auto w-full">
           
           {/* Objetivo */}
           <div className="text-center mb-2">
-            <p className="text-[16px] md:text-[17px] text-gray-600 font-medium">
+            <p className="text-[14px] md:text-[17px] text-gray-600 font-medium">
               {getGoalText()}
             </p>
           </div>
 
           {/* Peso atual como referência */}
-          <div className="text-center mb-4">
-            <p className="text-[14px] text-gray-400">
+          <div className="text-center mb-3 md:mb-4">
+            <p className="text-[13px] md:text-[14px] text-gray-400">
               Peso atual: {currentWeight.toFixed(1)} kg
             </p>
           </div>
 
           {/* Valor do peso desejado */}
-          <div className="text-center mb-10">
-            <div className={`text-[56px] md:text-[64px] font-bold leading-none mb-1 transition-colors duration-200 ${isValidWeight() ? 'text-black' : 'text-red-500'}`}>
+          <div className="text-center mb-6 md:mb-10">
+            <div className={`text-[48px] md:text-[64px] font-bold leading-none mb-1 transition-colors duration-200 ${isValidWeight() ? 'text-black' : 'text-red-500'}`}>
               {desiredWeight.toFixed(1)}
             </div>
-            <div className="text-[20px] md:text-[22px] text-gray-500">
+            <div className="text-[18px] md:text-[22px] text-gray-500">
               kg
             </div>
           </div>
 
           {/* Mensagem de validação */}
           {!isValidWeight() && (
-            <div className="text-center mb-4">
-              <p className="text-[14px] text-red-500">
+            <div className="text-center mb-3 md:mb-4">
+              <p className="text-[13px] md:text-[14px] text-red-500">
                 {getValidationMessage()}
               </p>
             </div>
           )}
 
           {/* Ruler/Slider Container - COM DRAG */}
-          <div className="relative mb-8 select-none">
+          <div className="relative mb-5 md:mb-8 select-none">
             <div 
               ref={sliderRef}
               className="relative h-24 md:h-20 overflow-visible rounded-lg bg-gray-50 cursor-pointer active:cursor-grabbing"
@@ -293,12 +293,12 @@ export default function DesiredWeightStep() {
       </div>
 
       {/* Botão fixo no bottom */}
-      <div className="px-6 pb-6 md:pb-8">
+      <div className="flex-shrink-0 px-5 md:px-6 pb-5 md:pb-8 bg-white">
         <div className="max-w-md mx-auto w-full">
           <SafeNavigationButton
             onClick={handleContinue}
             disabled={!isValidWeight()}
-            className={`w-full py-4 md:py-5 px-6 rounded-[16px] md:rounded-[20px] font-semibold text-[16px] md:text-[17px] transition-all duration-200 ${
+            className={`w-full py-3.5 md:py-5 px-6 rounded-[14px] md:rounded-[20px] font-semibold text-[15px] md:text-[17px] transition-all duration-200 ${
               isValidWeight() 
                 ? 'bg-[#FF911A] text-white active:scale-[0.98] hover:bg-[#FF911A]/90' 
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
