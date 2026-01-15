@@ -15,6 +15,12 @@ export function useQuizProgress() {
   const lastSavedStep = useRef<number>(-1);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isSavingRef = useRef(false);
+  const answersRef = useRef(answers);
+
+  // Atualizar ref dos answers sempre que mudarem
+  useEffect(() => {
+    answersRef.current = answers;
+  }, [answers]);
 
   // Inicializar leadId quando o hook é montado
   useEffect(() => {
@@ -26,14 +32,14 @@ export function useQuizProgress() {
     }
   }, [leadId, setLeadId]);
 
-  // Salvar progresso com debounce quando step muda
+  // Salvar progresso APENAS quando step muda (não quando answers mudam)
   useEffect(() => {
     if (!leadId) {
       console.log('⏳ Aguardando leadId...');
       return;
     }
 
-    // Só salvar se o step mudou
+    // Só salvar se o step mudou E não é o mesmo step já salvo
     if (currentStep === lastSavedStep.current) {
       return;
     }
@@ -49,34 +55,44 @@ export function useQuizProgress() {
       return;
     }
 
-    // Aguardar 500ms antes de salvar (debounce)
+    // Aguardar 800ms antes de salvar (debounce maior para evitar duplicações)
     saveTimeoutRef.current = setTimeout(async () => {
+      // Verificar novamente se ainda precisa salvar (pode ter mudado durante o debounce)
+      if (currentStep === lastSavedStep.current) {
+        console.log('⏭️ Step já foi salvo, pulando...');
+        return;
+      }
+
       isSavingRef.current = true;
+
+      // Usar ref para pegar os valores mais recentes dos answers
+      const currentAnswers = answersRef.current;
 
       // Preparar dados de tracking
       const trackingData = {
-        utm_source: answers.utm_source,
-        utm_medium: answers.utm_medium,
-        utm_campaign: answers.utm_campaign,
-        utm_term: answers.utm_term,
-        utm_content: answers.utm_content,
-        referrer: answers.referrer,
-        landingPage: answers.landingPage,
-        userAgent: answers.userAgent,
+        utm_source: currentAnswers.utm_source,
+        utm_medium: currentAnswers.utm_medium,
+        utm_campaign: currentAnswers.utm_campaign,
+        utm_term: currentAnswers.utm_term,
+        utm_content: currentAnswers.utm_content,
+        referrer: currentAnswers.referrer,
+        landingPage: currentAnswers.landingPage,
+        userAgent: currentAnswers.userAgent,
       };
 
       console.log('💾 Salvando progresso:', { 
         leadId, 
         step: currentStep, 
-        answersCount: Object.keys(answers).length 
+        lastSavedStep: lastSavedStep.current,
+        answersCount: Object.keys(currentAnswers).length 
       });
       
       try {
-        const result = await saveQuizProgress(leadId, answers, currentStep, trackingData);
+        const result = await saveQuizProgress(leadId, currentAnswers, currentStep, trackingData);
         
         if (result.success) {
           lastSavedStep.current = currentStep;
-          console.log('✅ Progresso salvo com sucesso');
+          console.log('✅ Progresso salvo com sucesso no step', currentStep);
         } else {
           console.error('❌ Falha ao salvar progresso:', result);
         }
@@ -85,7 +101,7 @@ export function useQuizProgress() {
       } finally {
         isSavingRef.current = false;
       }
-    }, 500); // Debounce de 500ms
+    }, 800); // Debounce aumentado para 800ms
 
     // Cleanup
     return () => {
@@ -93,7 +109,7 @@ export function useQuizProgress() {
         clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, [leadId, answers, currentStep]);
+  }, [leadId, currentStep]); // REMOVIDO 'answers' das dependências - só salva quando step muda
 
   return { leadId };
 }

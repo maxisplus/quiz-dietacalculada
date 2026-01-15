@@ -348,6 +348,30 @@ export async function POST(request: NextRequest) {
       ? (dietHelperOptionMap[quizData.dietHelper] || quizData.dietHelper)
       : '';
 
+    // Verificar se já existe linha com este leadId para evitar duplicação
+    const leadIdToCheck = quizData.leadId || '';
+    let existingRowIndex = -1;
+    
+    if (leadIdToCheck) {
+      try {
+        const allRows = await sheets.spreadsheets.values.get({
+          spreadsheetId,
+          range: 'A:B', // Buscar apenas colunas A (Data/Hora) e B (Lead ID)
+        });
+        
+        const rows = allRows.data.values || [];
+        for (let i = 1; i < rows.length; i++) {
+          if (rows[i][1] === leadIdToCheck) {
+            existingRowIndex = i + 1; // +1 porque a planilha começa em 1
+            console.log(`📍 Linha existente encontrada no índice: ${existingRowIndex} para leadId: ${leadIdToCheck}`);
+            break;
+          }
+        }
+      } catch (error) {
+        console.error('⚠️ Erro ao verificar linha existente:', error);
+      }
+    }
+
     // Linha de dados - ORDEM EXATA DO QUIZ (37 colunas: A-AK)
     const values = [[
       timestamp,                                    // A - Data/Hora
@@ -389,16 +413,27 @@ export async function POST(request: NextRequest) {
       quizData.userAgent || '',                     // AK - User Agent
     ]];
 
-    // Salvar dados na planilha principal (usando range sem especificar aba, como na API original)
-    await sheets.spreadsheets.values.append({
-      spreadsheetId,
-      range: 'A:AK',
-      valueInputOption: 'USER_ENTERED',
-      insertDataOption: 'INSERT_ROWS',
-      requestBody: { values },
-    });
-
-    console.log('✅ Dados salvos com sucesso');
+    // Atualizar linha existente OU criar nova se não existir
+    if (existingRowIndex > 0) {
+      console.log(`🔄 Atualizando linha existente ${existingRowIndex} com dados de checkout`);
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: `A${existingRowIndex}:AK${existingRowIndex}`,
+        valueInputOption: 'USER_ENTERED',
+        requestBody: { values },
+      });
+      console.log('✅ Linha atualizada com sucesso (evitou duplicação)');
+    } else {
+      console.log('➕ Criando nova linha (leadId não encontrado ou não fornecido)');
+      await sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: 'A:AK',
+        valueInputOption: 'USER_ENTERED',
+        insertDataOption: 'INSERT_ROWS',
+        requestBody: { values },
+      });
+      console.log('✅ Nova linha criada com sucesso');
+    }
 
     // Liberar lock
     await releaseLock(sheets, spreadsheetId);
